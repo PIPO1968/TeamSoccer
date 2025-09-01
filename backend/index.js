@@ -1,3 +1,406 @@
+// Programar eliminatorias de selecciones nacionales tras la fase de grupos
+async function scheduleNationalTeamKnockouts(season, type) {
+    // type: 'mundial' o 'intercontinental'
+    const Match = require('./models/Match');
+    const NationalTeam = require('./models/NationalTeam');
+    // Obtener todos los grupos (por cómo se crearon los partidos de grupos)
+    // Suponemos que los partidos de grupos ya se han jugado y standings están disponibles
+    // 1. Obtener los dos primeros de cada grupo
+    // 2. Emparejar para cuartos, semifinales, final y tercer puesto
+    // 3. Programar partidos directos
+
+    // Obtener selecciones participantes
+    const nationalTeams = await NationalTeam.find({ season, locked: true, manager: { $ne: null } });
+    if (nationalTeams.length < 8) return;
+    // Repetir el mismo agrupamiento que en la fase de grupos
+    const shuffled = nationalTeams.sort(() => Math.random() - 0.5);
+    const groups = [];
+    for (let i = 0; i < shuffled.length; i += 8) {
+        groups.push(shuffled.slice(i, i + 8));
+    }
+    // Obtener standings de cada grupo
+    const groupWinners = [];
+    for (const group of groups) {
+        // Buscar partidos de grupo
+        const teamIds = group.map(t => t._id.toString());
+        const matches = await Match.find({
+            type,
+            homeTeam: { $in: teamIds },
+            awayTeam: { $in: teamIds }
+        });
+        // Calcular standings
+        const table = {};
+        for (const tid of teamIds) {
+            table[tid] = { team: tid, points: 0, goalDiff: 0, goalsFor: 0 };
+        }
+        for (const m of matches) {
+            if (typeof m.homeGoals === 'number' && typeof m.awayGoals === 'number') {
+                table[m.homeTeam.toString()].goalsFor += m.homeGoals;
+                table[m.homeTeam.toString()].goalDiff += m.homeGoals - m.awayGoals;
+                table[m.awayTeam.toString()].goalsFor += m.awayGoals;
+                table[m.awayTeam.toString()].goalDiff += m.awayGoals - m.homeGoals;
+                if (m.homeGoals > m.awayGoals) {
+                    table[m.homeTeam.toString()].points += 3;
+                } else if (m.homeGoals < m.awayGoals) {
+                    table[m.awayTeam.toString()].points += 3;
+                } else {
+                    table[m.homeTeam.toString()].points += 1;
+                    table[m.awayTeam.toString()].points += 1;
+                }
+            }
+        }
+        const standings = Object.values(table).sort((a, b) =>
+            b.points - a.points || b.goalDiff - a.goalDiff || b.goalsFor - a.goalsFor
+        );
+        if (standings[0]) groupWinners.push(standings[0].team);
+        if (standings[1]) groupWinners.push(standings[1].team);
+    }
+    // Emparejar para cuartos de final (8 equipos)
+    if (groupWinners.length < 8) return;
+    const quarterPairs = [
+        [groupWinners[0], groupWinners[7]],
+        [groupWinners[1], groupWinners[6]],
+        [groupWinners[2], groupWinners[5]],
+        [groupWinners[3], groupWinners[4]]
+    ];
+    const nextMatchDate = getNextMatchDate(type);
+    // Cuartos de final
+    const quarterMatches = [];
+    for (const [a, b] of quarterPairs) {
+        const match = await Match.create({
+            homeTeam: a,
+            awayTeam: b,
+            homeGoals: null,
+            awayGoals: null,
+            type,
+            scheduledFor: nextMatchDate,
+            lockedLineup: false,
+            comments: []
+        });
+        quarterMatches.push(match);
+    }
+
+    // Automatizar semifinales, final y tercer puesto tras cada ronda
+    // Esperar a que se jueguen los cuartos (simulación: 7 días después)
+    setTimeout(async () => {
+        // Obtener ganadores de cuartos
+        const playedQuarters = await Match.find({
+            _id: { $in: quarterMatches.map(m => m._id) },
+            homeGoals: { $ne: null },
+            awayGoals: { $ne: null }
+        });
+        if (playedQuarters.length < 4) return; // Asegura que todos se jugaron
+        const semiTeams = [];
+        for (const m of playedQuarters) {
+            if (m.homeGoals > m.awayGoals) semiTeams.push(m.homeTeam);
+            else semiTeams.push(m.awayTeam);
+        }
+        // Semifinales
+        const semiPairs = [
+            [semiTeams[0], semiTeams[1]],
+            [semiTeams[2], semiTeams[3]]
+        ];
+        const semiDate = getNextMatchDate(type);
+        const semiMatches = [];
+        for (const [a, b] of semiPairs) {
+            const match = await Match.create({
+                homeTeam: a,
+                awayTeam: b,
+                homeGoals: null,
+                awayGoals: null,
+                type,
+                scheduledFor: semiDate,
+                lockedLineup: false,
+                comments: []
+            });
+            semiMatches.push(match);
+        }
+        // Esperar a que se jueguen las semifinales (simulación: 7 días después)
+        setTimeout(async () => {
+            const playedSemis = await Match.find({
+                _id: { $in: semiMatches.map(m => m._id) },
+                homeGoals: { $ne: null },
+                awayGoals: { $ne: null }
+            });
+            if (playedSemis.length < 2) return;
+            const finalists = [];
+            const thirdPlace = [];
+            for (const m of playedSemis) {
+                if (m.homeGoals > m.awayGoals) finalists.push(m.homeTeam);
+                else finalists.push(m.awayTeam);
+                if (m.homeGoals > m.awayGoals) thirdPlace.push(m.awayTeam);
+                else thirdPlace.push(m.homeTeam);
+            }
+            // Final
+            const finalMatch = await Match.create({
+                homeTeam: finalists[0],
+                awayTeam: finalists[1],
+                homeGoals: null,
+                awayGoals: null,
+                type,
+                scheduledFor: getNextMatchDate(type),
+                lockedLineup: false,
+                comments: []
+            });
+            // Tercer puesto
+            const thirdMatch = await Match.create({
+                homeTeam: thirdPlace[0],
+                awayTeam: thirdPlace[1],
+                homeGoals: null,
+                awayGoals: null,
+                type,
+                scheduledFor: getNextMatchDate(type),
+                lockedLineup: false,
+                comments: []
+            });
+
+            // Otorgar trofeos automáticamente tras la final y tercer puesto (simulación: 7 días después)
+            setTimeout(async () => {
+                const final = await Match.findById(finalMatch._id);
+                const third = await Match.findById(thirdMatch._id);
+                if (!final || !third) return;
+                // Oro y plata
+                let oro = null, plata = null;
+                if (final.homeGoals > final.awayGoals) {
+                    oro = final.homeTeam;
+                    plata = final.awayTeam;
+                } else {
+                    oro = final.awayTeam;
+                    plata = final.homeTeam;
+                }
+                // Bronce (ambos perdedores de semifinales)
+                let bronces = [third.homeTeam, third.awayTeam];
+                // Actualizar selecciones nacionales con trofeos
+                await NationalTeam.findByIdAndUpdate(oro, { $push: { trophies: { type: 'oro', season, competition: type } } });
+                await NationalTeam.findByIdAndUpdate(plata, { $push: { trophies: { type: 'plata', season, competition: type } } });
+                for (const b of bronces) {
+                    await NationalTeam.findByIdAndUpdate(b, { $push: { trophies: { type: 'bronce', season, competition: type } } });
+                }
+            }, 1000 * 60 * 60 * 24 * 7); // 7 días después de la final
+        }, 1000 * 60 * 60 * 24 * 7); // 7 días después de semifinales
+    }, 1000 * 60 * 60 * 24 * 7); // 7 días después de cuartos
+}
+// =====================
+// GENERACIÓN Y PROGRAMACIÓN DE COMPETICIONES DE SELECCIONES NACIONALES
+// =====================
+
+// Llama esto al inicio de cada temporada
+async function scheduleNationalTeamCompetitions(season) {
+    // Solo a partir de la temporada 4
+    if (season < 4) return;
+    // Temporadas pares: alternar Mundial e Intercontinental
+    let type = null;
+    if (season % 2 === 0) {
+        if ((season - 4) % 4 === 0) {
+            type = 'mundial';
+        } else if ((season - 6) % 4 === 0) {
+            type = 'intercontinental';
+        }
+    }
+    if (!type) return;
+    // Selecciones nacionales cerradas y con manager
+    const nationalTeams = await NationalTeam.find({ season, locked: true, manager: { $ne: null } });
+    if (nationalTeams.length < 8) return; // Mínimo 8 selecciones
+    // Mezclar y agrupar en grupos de 8
+    const shuffled = nationalTeams.sort(() => Math.random() - 0.5);
+    const groups = [];
+    for (let i = 0; i < shuffled.length; i += 8) {
+        groups.push(shuffled.slice(i, i + 8));
+    }
+    // Crear partidos de grupos (todos contra todos)
+    const Match = require('./models/Match');
+    for (const group of groups) {
+        for (let i = 0; i < group.length; i++) {
+            for (let j = i + 1; j < group.length; j++) {
+                const home = group[i];
+                const away = group[j];
+                const fecha = getNextMatchDate(type);
+                await Match.create({
+                    homeTeam: home._id,
+                    awayTeam: away._id,
+                    homeGoals: 0,
+                    awayGoals: 0,
+                    type,
+                    scheduledFor: fecha,
+                    lockedLineup: false,
+                    comments: []
+                });
+            }
+        }
+    }
+    // Después de la fase de grupos, programar eliminatorias (los 2 primeros de cada grupo)
+    // Llamada automática tras la fase de grupos
+    setTimeout(async () => {
+        await scheduleNationalTeamKnockouts(season, type);
+    }, 1000 * 60 * 60 * 24 * 7); // 7 días después (ajusta según la duración real de la fase de grupos)
+}
+
+// Puedes llamar a scheduleNationalTeamCompetitions(season) al crear la nueva temporada
+// =====================
+// ELECCIÓN DE JUGADORES PARA SELECCIÓN NACIONAL
+// =====================
+
+// Añadir jugadores a la selección nacional (solo seleccionador, solo durante la semana de selección)
+app.post('/api/national-teams/add-players', auth, async (req, res) => {
+    try {
+        const { country, season, players } = req.body; // players: array de objetos {name, position, rating, club}
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        const nationalTeam = await NationalTeam.findOne({ country, season });
+        if (!nationalTeam) return res.status(404).json({ error: 'Selección nacional no encontrada' });
+        if (nationalTeam.manager.toString() !== user._id.toString()) {
+            return res.status(403).json({ error: 'Solo el seleccionador puede elegir jugadores' });
+        }
+        if (nationalTeam.locked) {
+            return res.status(400).json({ error: 'La selección ya está cerrada' });
+        }
+        const now = new Date();
+        if (now > nationalTeam.selectionOpenUntil) {
+            nationalTeam.locked = true;
+            await nationalTeam.save();
+            return res.status(400).json({ error: 'El plazo para elegir jugadores ha finalizado' });
+        }
+        // Solo jugadores del país y máximo 18
+        if (players.length > 18) return res.status(400).json({ error: 'Máximo 18 jugadores' });
+        // Validar que todos los jugadores sean del país
+        for (const p of players) {
+            const club = await Team.findById(p.club);
+            if (!club || club.country !== country) {
+                return res.status(400).json({ error: `El jugador ${p.name} no pertenece a un club del país` });
+            }
+        }
+        nationalTeam.players = players;
+        await nationalTeam.save();
+        res.json({ message: 'Jugadores seleccionados', nationalTeam });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Cerrar selección nacional manualmente (opcional, solo seleccionador)
+app.post('/api/national-teams/lock', auth, async (req, res) => {
+    try {
+        const { country, season } = req.body;
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        const nationalTeam = await NationalTeam.findOne({ country, season });
+        if (!nationalTeam) return res.status(404).json({ error: 'Selección nacional no encontrada' });
+        if (nationalTeam.manager.toString() !== user._id.toString()) {
+            return res.status(403).json({ error: 'Solo el seleccionador puede cerrar la selección' });
+        }
+        nationalTeam.locked = true;
+        await nationalTeam.save();
+        res.json({ message: 'Selección nacional cerrada', nationalTeam });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+// =====================
+// POSTULACIÓN Y VOTACIÓN SELECCIONADOR NACIONAL
+// =====================
+
+// Postularse a seleccionador nacional
+app.post('/api/national-candidacies', auth, async (req, res) => {
+    try {
+        const { country, season } = req.body;
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        // Solo managers premium pueden postularse a cualquier país
+        if (!user.premium && user.country !== country) {
+            return res.status(403).json({ error: 'Solo managers premium pueden postularse a otros países' });
+        }
+        // No duplicar candidatura
+        const exists = await NationalCandidacy.findOne({ country, season, user: user._id });
+        if (exists) return res.status(400).json({ error: 'Ya estás postulado para esta selección y temporada' });
+        const candidacy = new NationalCandidacy({ country, season, user: user._id, isPremium: !!user.premium });
+        await candidacy.save();
+        res.status(201).json({ message: 'Candidatura registrada', candidacy });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Listar candidaturas de un país y temporada
+app.get('/api/national-candidacies', async (req, res) => {
+    try {
+        const { country, season } = req.query;
+        const candidacies = await NationalCandidacy.find({ country, season }).populate('user', 'username premium');
+        res.json(candidacies);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Votar a seleccionador nacional
+app.post('/api/national-votes', auth, async (req, res) => {
+    try {
+        const { country, season, candidate } = req.body;
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        // Solo managers del país pueden votar a su seleccionador
+        if (user.country !== country) {
+            return res.status(403).json({ error: 'Solo managers del país pueden votar a su seleccionador' });
+        }
+        // No duplicar voto
+        const alreadyVoted = await NationalVote.findOne({ country, season, voter: user._id });
+        if (alreadyVoted) return res.status(400).json({ error: 'Ya has votado para esta selección y temporada' });
+        const vote = new NationalVote({ country, season, voter: user._id, candidate });
+        await vote.save();
+        res.status(201).json({ message: 'Voto registrado', vote });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Listar votos de un país y temporada
+app.get('/api/national-votes', async (req, res) => {
+    try {
+        const { country, season } = req.query;
+        const votes = await NationalVote.find({ country, season }).populate('voter', 'username').populate('candidate', 'username');
+        res.json(votes);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Recuento y asignación de seleccionador nacional
+app.post('/api/national-teams/assign-manager', async (req, res) => {
+    try {
+        const { country, season } = req.body;
+        // Contar votos por candidato
+        const votes = await NationalVote.find({ country, season });
+        const count = {};
+        for (const v of votes) {
+            count[v.candidate] = (count[v.candidate] || 0) + 1;
+        }
+        // Buscar el candidato más votado
+        let winner = null;
+        let maxVotes = 0;
+        for (const [candidate, num] of Object.entries(count)) {
+            if (num > maxVotes) {
+                winner = candidate;
+                maxVotes = num;
+            }
+        }
+        if (!winner) return res.status(400).json({ error: 'No hay votos para esta selección' });
+        // Crear o actualizar la selección nacional
+        let nationalTeam = await NationalTeam.findOne({ country, season });
+        if (!nationalTeam) {
+            nationalTeam = new NationalTeam({ country, season, manager: winner, players: [], locked: false });
+        } else {
+            nationalTeam.manager = winner;
+            nationalTeam.players = [];
+            nationalTeam.locked = false;
+        }
+        // Dar una semana para elegir jugadores
+        const now = new Date();
+        nationalTeam.selectionOpenUntil = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        await nationalTeam.save();
+        res.json({ message: 'Seleccionador asignado', nationalTeam });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 // Automatizar el cierre de temporada: ascensos, descensos, premios, trofeos y semana de descanso
 async function closeSeasonAndRebuildDivisions(season = 1, region = 'europa') {
     const Division = require('./models/Division');
@@ -40,6 +443,9 @@ async function closeSeasonAndRebuildDivisions(season = 1, region = 'europa') {
     for (const d of newDivisions) {
         divMap[`${d.level}-${d.name}`] = d;
     }
+
+    // Programar automáticamente competiciones de selecciones nacionales si corresponde
+    await scheduleNationalTeamCompetitions(nextSeason);
 
     // Mover equipos según la lógica de ascensos/descensos/promociones
     for (const oldDiv of oldDivisions) {
@@ -565,6 +971,9 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer
 // Modelos
 const User = require('./models/User');
 const Team = require('./models/Team');
+const NationalTeam = require('./models/NationalTeam');
+const NationalCandidacy = require('./models/NationalCandidacy');
+const NationalVote = require('./models/NationalVote');
 const auth = require('./middleware/auth');
 const Match = require('./models/Match');
 const FriendlyMatch = require('./models/FriendlyMatch');
