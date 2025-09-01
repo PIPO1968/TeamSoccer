@@ -11,6 +11,14 @@ const teamSchema = new mongoose.Schema({
         name: String,
         position: String,
         rating: Number
+    }],
+    lastTrainingWeek: { type: Number, default: null }, // Semana ISO del último entrenamiento
+    preferredMatchTime: { type: String, default: null } // Hora personalizada de partido (solo premium, ej: '20:00')
+    trophies: [{
+        type: { type: String }, // oro, plata, bronce
+        season: Number,
+        division: String,
+        competition: String // opcional: liga, copa, mundial, etc.
     }]
 });
 

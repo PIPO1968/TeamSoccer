@@ -1,3 +1,178 @@
+// Estadísticas detalladas premium
+const premiumStats = require('./routes/premiumStats');
+app.use('/api/premium', auth, premiumStats);
+// Configurar hora personalizada de partido (solo premium)
+app.put('/api/teams/:id/match-time', auth, async (req, res) => {
+    try {
+        const User = require('./models/User');
+        const Team = require('./models/Team');
+        const user = await User.findById(req.user.userId);
+        if (!user || !user.premium) {
+            return res.status(403).json({ error: 'Esto es una opcion premium' });
+        }
+        const team = await Team.findById(req.params.id);
+        if (!team || String(team.owner) !== req.user.userId) {
+            return res.status(403).json({ error: 'No autorizado' });
+        }
+        const { preferredMatchTime } = req.body;
+        if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(preferredMatchTime)) {
+            return res.status(400).json({ error: 'Formato de hora inválido (hh:mm)' });
+        }
+        // Buscar el próximo partido en casa (cualquier tipo)
+        const Match = require('./models/Match');
+        const now = new Date();
+        const nextHomeMatch = await Match.findOne({
+            homeTeam: team._id,
+            scheduledFor: { $gte: now }
+        }).sort({ scheduledFor: 1 });
+        if (nextHomeMatch) {
+            const diffMs = new Date(nextHomeMatch.scheduledFor) - now;
+            if (diffMs < 24 * 60 * 60 * 1000) {
+                return res.status(400).json({ error: 'Solo puedes cambiar la hora si faltan más de 24h para tu próximo partido en casa.' });
+            }
+        }
+        team.preferredMatchTime = preferredMatchTime;
+        await team.save();
+        res.json({ message: 'Hora personalizada de partido guardada', preferredMatchTime });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+// Mensajes en salas (foro privado)
+// Obtener mensajes de una sala
+app.get('/api/rooms/:id/messages', async (req, res) => {
+    try {
+        const Room = require('./models/Room');
+        const room = await Room.findById(req.params.id).populate('messages.user', 'username');
+        if (!room) return res.status(404).json({ error: 'Sala no encontrada' });
+        res.json({ messages: room.messages || [] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Enviar mensaje a una sala (solo miembros, pero por ahora abierto a cualquier logueado)
+app.post('/api/rooms/:id/messages', auth, async (req, res) => {
+    try {
+        const Room = require('./models/Room');
+        const User = require('./models/User');
+        const room = await Room.findById(req.params.id);
+        if (!room) return res.status(404).json({ error: 'Sala no encontrada' });
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(403).json({ error: 'No autorizado' });
+        const { text } = req.body;
+        const msg = { user: user._id, text, createdAt: new Date() };
+        room.messages.push(msg);
+        await room.save();
+        res.status(201).json({ message: 'Mensaje enviado' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+// =====================
+// SALAS (ROOMS) PREMIUM
+// =====================
+const Room = require('./models/Room');
+// Crear sala (solo premium)
+app.post('/api/rooms', auth, async (req, res) => {
+    try {
+        const User = require('./models/User');
+        const user = await User.findById(req.user.userId);
+        if (!user || !user.premium) {
+            return res.status(403).json({ error: 'Esto es una opcion premium' });
+        }
+        const { name, type, settings } = req.body;
+        const room = new Room({ name, owner: user._id, isPremium: true, type, settings });
+        await room.save();
+        res.status(201).json({ message: 'Sala creada', room });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Listar salas (todas, públicas)
+app.get('/api/rooms', async (req, res) => {
+    try {
+        const rooms = await Room.find().populate('owner', 'username');
+        res.json(rooms);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+// Endpoint para consultar la vitrina de trofeos de un equipo (solo club, no selecciones)
+app.get('/api/teams/:id/trophies', async (req, res) => {
+    try {
+        const Team = require('./models/Team');
+        const team = await Team.findById(req.params.id);
+        if (!team) return res.status(404).json({ error: 'Equipo no encontrado' });
+        // Solo trofeos de club, nunca de selecciones
+        res.json({ trophies: team.trophies || [] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+// =====================
+// AUTO-ENTRENAMIENTO PREMIUM (lógica automática)
+// =====================
+// Si el usuario premium no realiza entrenamiento manual en la semana, se le aplica uno por defecto automáticamente.
+// Esta lógica debe integrarse en el script semanal de entrenamiento o en el endpoint correspondiente.
+// =====================
+// TIENDA PREMIUM Y TSCREDITS
+// =====================
+
+// Ver estado premium y TScredits
+app.get('/api/store/status', auth, async (req, res) => {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json({ premium: user.premium, premiumUntil: user.premiumUntil, tscredits: user.tscredits });
+});
+
+// Activar o renovar premium (simulado)
+app.post('/api/store/premium', auth, async (req, res) => {
+    try {
+        const { months } = req.body; // 1, 3, 12
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        const now = new Date();
+        let base = user.premiumUntil && user.premiumUntil > now ? user.premiumUntil : now;
+        user.premiumUntil = new Date(base.getTime() + months * 30 * 24 * 60 * 60 * 1000);
+        user.premium = true;
+        await user.save();
+        res.json({ message: 'Premium activado/renovado', premiumUntil: user.premiumUntil });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Premium gratis 15 días (solo si nunca ha sido premium)
+app.post('/api/store/premium-free', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        if (user.premiumUntil) return res.status(400).json({ error: 'Ya has usado el premium gratis' });
+        const now = new Date();
+        user.premiumUntil = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
+        user.premium = true;
+        await user.save();
+        res.json({ message: 'Premium gratis activado', premiumUntil: user.premiumUntil });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Comprar TScredits
+app.post('/api/store/tscredits', auth, async (req, res) => {
+    try {
+        const { amount } = req.body; // 10, 25, 50, 100
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        user.tscredits += amount;
+        await user.save();
+        res.json({ message: 'TScredits añadidos', tscredits: user.tscredits });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 // Vender jugador al banco (solo el banco puede poner en venta, no entre managers)
 app.post('/api/transfers/sell', auth, async (req, res) => {
     try {
@@ -777,19 +952,24 @@ const tournamentSchema = new mongoose.Schema({
 });
 const Tournament = mongoose.models.Tournament || mongoose.model('Tournament', tournamentSchema);
 
-// Middleware para managers premium
+// Middleware para managers premium (genérico)
 async function isPremium(req, res, next) {
     const User = require('./models/User');
     const user = await User.findById(req.user.userId);
     if (!user || !user.premium) {
-        return res.status(403).json({ error: 'Solo managers premium pueden crear torneos personalizados' });
+        return res.status(403).json({ error: 'Solo managers premium pueden acceder a esta función' });
     }
     next();
 }
 
 // Crear torneo personalizado (solo premium)
-app.post('/api/tournaments', auth, isPremium, async (req, res) => {
+app.post('/api/tournaments', auth, async (req, res) => {
     try {
+        const User = require('./models/User');
+        const user = await User.findById(req.user.userId);
+        if (!user || !user.premium) {
+            return res.status(403).json({ error: 'Esto es una opcion premium' });
+        }
         const { name, teams } = req.body;
         const tournament = new Tournament({ name, creator: req.user.userId, teams });
         await tournament.save();
@@ -1127,6 +1307,18 @@ app.post('/api/friendlies/request', auth, async (req, res) => {
             scheduledFor: nextWednesday
         });
         await friendly.save();
+
+        // Lógica de colección de banderas (solo premium)
+        const User = require('./models/User');
+        const requester = await User.findById(req.user.userId);
+        const opponent = await User.findById(opponentId);
+        if (requester && requester.premium && opponent && opponent.country) {
+            if (!requester.flags.includes(opponent.country)) {
+                requester.flags.push(opponent.country);
+                await requester.save();
+            }
+        }
+
         res.status(201).json({ message: 'Solicitud de amistoso enviada', friendly });
     } catch (error) {
         res.status(400).json({ error: error.message });
