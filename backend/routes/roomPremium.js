@@ -1,3 +1,149 @@
+// Consultar estado actual de Room Madness
+router.get('/room-madness/status', async (req, res) => {
+    try {
+        const madness = await RoomMadness.findOne().sort({ startedAt: -1 }).populate('rooms', 'name').populate('winner', 'name');
+        if (!madness) return res.status(404).json({ error: 'No hay Room Madness activa.' });
+        res.json({
+            season: madness.season,
+            startedAt: madness.startedAt,
+            finishedAt: madness.finishedAt,
+            currentRound: madness.currentRound,
+            rooms: madness.rooms,
+            winner: madness.winner
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Consultar partidos de una ronda
+router.get('/room-madness/matches/:round', async (req, res) => {
+    try {
+        const madness = await RoomMadness.findOne().sort({ startedAt: -1 });
+        if (!madness) return res.status(404).json({ error: 'No hay Room Madness activa.' });
+        const round = parseInt(req.params.round);
+        const matches = madness.matches.filter(m => m.round === round);
+        res.json({ matches });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Consultar ganador de la Room Madness
+router.get('/room-madness/winner', async (req, res) => {
+    try {
+        const madness = await RoomMadness.findOne().sort({ startedAt: -1 }).populate('winner', 'name');
+        if (!madness || !madness.winner) return res.status(404).json({ error: 'No hay ganador aún.' });
+        res.json({ winner: madness.winner });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// Room Madness: crear competición y avanzar rondas
+const RoomMadness = require('../models/RoomMadness');
+// Lanzar Room Madness (solo admin, pero aquí abierto para demo)
+router.post('/room-madness/start', async (req, res) => {
+    try {
+        const season = req.body.season || (new Date()).getFullYear();
+        // Salas completas (10 miembros)
+        const Room = require('../models/Room');
+        const rooms = await Room.find({ members: { $size: 10 } });
+        if (rooms.length < 2) return res.status(400).json({ error: 'No hay suficientes salas completas.' });
+        // Emparejar aleatoriamente
+        const shuffled = [...rooms];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        // Crear partidos de primera ronda
+        const matches = [];
+        for (let i = 0; i < shuffled.length; i += 2) {
+            if (i + 1 >= shuffled.length) break; // impar, uno queda fuera
+            matches.push({
+                round: 1,
+                homeRoom: shuffled[i]._id,
+                awayRoom: shuffled[i+1]._id,
+                homeTeamIds: shuffled[i].members,
+                awayTeamIds: shuffled[i+1].members,
+                homeGoals: null,
+                awayGoals: null,
+                winner: null,
+                playedAt: null
+            });
+        }
+        const madness = new RoomMadness({
+            season,
+            startedAt: new Date(),
+            matches,
+            currentRound: 1,
+            rooms: rooms.map(r => r._id)
+        });
+        await madness.save();
+        res.json({ madness });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Avanzar ronda: simular partidos de la ronda actual y crear la siguiente
+router.post('/room-madness/next-round', async (req, res) => {
+    try {
+        const madness = await RoomMadness.findOne().sort({ startedAt: -1 });
+        if (!madness || madness.finishedAt) return res.status(400).json({ error: 'No hay Room Madness activa.' });
+        const currentMatches = madness.matches.filter(m => m.round === madness.currentRound && m.winner == null);
+        if (currentMatches.length === 0) return res.status(400).json({ error: 'No hay partidos pendientes en esta ronda.' });
+        const winners = [];
+        for (const match of currentMatches) {
+            // Simulación simple: suma goles de todos los equipos (aleatorio)
+            const homeGoals = Math.floor(Math.random() * 11) + 5;
+            const awayGoals = Math.floor(Math.random() * 11) + 5;
+            match.homeGoals = homeGoals;
+            match.awayGoals = awayGoals;
+            if (homeGoals > awayGoals) {
+                match.winner = match.homeRoom;
+                winners.push(match.homeRoom);
+            } else if (awayGoals > homeGoals) {
+                match.winner = match.awayRoom;
+                winners.push(match.awayRoom);
+            } else {
+                // Desempate aleatorio
+                match.winner = Math.random() < 0.5 ? match.homeRoom : match.awayRoom;
+                winners.push(match.winner);
+            }
+            match.playedAt = new Date();
+        }
+        // Si solo queda un ganador, termina
+        if (winners.length === 1) {
+            madness.finishedAt = new Date();
+            madness.winner = winners[0];
+            // Sumar logo VIP a la sala ganadora
+            const Room = require('../models/Room');
+            await Room.findByIdAndUpdate(winners[0], { $inc: { vipLogos: 1 } });
+        } else {
+            // Crear nueva ronda
+            const nextRound = madness.currentRound + 1;
+            for (let i = 0; i < winners.length; i += 2) {
+                if (i + 1 >= winners.length) break;
+                madness.matches.push({
+                    round: nextRound,
+                    homeRoom: winners[i],
+                    awayRoom: winners[i+1],
+                    homeTeamIds: [],
+                    awayTeamIds: [],
+                    homeGoals: null,
+                    awayGoals: null,
+                    winner: null,
+                    playedAt: null
+                });
+            }
+            madness.currentRound = nextRound;
+        }
+        await madness.save();
+        res.json({ madness });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 // Reto logo/tour: presidente reta a otra sala, 5 partidos entre líderes
 // Añadimos restricción: una sala solo puede tener un reto pendiente a la vez
 const pendingChallenges = new Set(); // En memoria, para demo. En producción, usar DB/campo en Room.
