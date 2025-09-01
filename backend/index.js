@@ -1,3 +1,115 @@
+// Vender jugador al banco (solo el banco puede poner en venta, no entre managers)
+app.post('/api/transfers/sell', auth, async (req, res) => {
+    try {
+        const { teamId, playerIndex } = req.body;
+        const Team = require('./models/Team');
+        const team = await Team.findById(teamId);
+        if (!team || String(team.owner) !== req.user.userId) return res.status(403).json({ error: 'No autorizado' });
+        if (typeof playerIndex !== 'number' || playerIndex < 0 || playerIndex >= team.players.length) return res.status(400).json({ error: 'Índice de jugador inválido' });
+        const player = team.players[playerIndex];
+        // Calcular precio según habilidades y edad
+        const age = player.age || 25;
+        const rating = player.rating || Object.values(player.skills || {}).reduce((a, b) => a + b, 0) || 50;
+        const price = 100000 + rating * 1000 - age * 500;
+        // El banco compra el jugador
+        team.players.splice(playerIndex, 1);
+        team.economy = (team.economy || 0) + price;
+        await team.save();
+        // Poner en venta en el mercado
+        await Transfer.create({
+            player: { ...player, fromClub: team._id },
+            price,
+            currentBid: null,
+            currentBidder: null,
+            bids: [],
+            status: 'open',
+            listedAt: new Date(),
+            expiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
+            lastBidAt: null
+        });
+        res.json({ message: 'Jugador vendido al banco y puesto en el mercado', price });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Ver historial de transferencias (vendidos y cerrados)
+app.get('/api/transfers/history', async (req, res) => {
+    try {
+        const transfers = await Transfer.find({ status: { $in: ['closed', 'sold'] } });
+        res.json(transfers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+// =====================
+// TRANSFER MARKET: ENDPOINTS Y SUBASTAS
+// =====================
+const Transfer = require('./models/Transfer');
+
+// Ver jugadores en el mercado de transferencias
+app.get('/api/transfers', async (req, res) => {
+    try {
+        const transfers = await Transfer.find({ status: 'open' });
+        res.json(transfers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Pujar por un jugador
+app.post('/api/transfers/:id/bid', auth, async (req, res) => {
+    try {
+        const transfer = await Transfer.findById(req.params.id);
+        if (!transfer || transfer.status !== 'open') return res.status(404).json({ error: 'Transferencia no disponible' });
+        const { amount, teamId } = req.body;
+        // Comprobar economía del club
+        const Team = require('./models/Team');
+        const team = await Team.findById(teamId);
+        if (!team || String(team.owner) !== req.user.userId) return res.status(403).json({ error: 'No autorizado' });
+        if ((team.economy || 0) < amount) return res.status(400).json({ error: 'Fondos insuficientes' });
+        // La puja debe ser mayor que la actual o igual al precio de salida
+        if (transfer.currentBid && amount <= transfer.currentBid) return res.status(400).json({ error: 'La puja debe ser mayor que la actual' });
+        if (!transfer.currentBid && amount < transfer.price) return res.status(400).json({ error: 'La puja debe ser al menos igual al precio de salida' });
+        // Registrar puja
+        transfer.currentBid = amount;
+        transfer.currentBidder = team._id;
+        transfer.bids.push({ team: team._id, amount, time: new Date() });
+        transfer.lastBidAt = new Date();
+        // Extensión de tiempo si la puja es en los últimos 2 minutos
+        const now = new Date();
+        const msToExpire = transfer.expiresAt - now;
+        if (msToExpire <= 2 * 60 * 1000) {
+            transfer.expiresAt = new Date(transfer.expiresAt.getTime() + 5 * 60 * 1000);
+        }
+        await transfer.save();
+        res.json({ message: 'Puja realizada', transfer });
+        // Programar adjudicación si no está ya programada
+        setTimeout(async () => {
+            const t = await Transfer.findById(transfer._id);
+            if (t.status === 'open' && t.expiresAt <= new Date()) {
+                t.status = 'sold';
+                await t.save();
+                // Traspaso automático tras 2 minutos
+                setTimeout(async () => {
+                    const Team = require('./models/Team');
+                    const team = await Team.findById(t.currentBidder);
+                    if (team && (team.economy || 0) >= t.currentBid) {
+                        // Añadir jugador al club
+                        team.players.push({ ...t.player, club: undefined });
+                        team.economy = (team.economy || 0) - t.currentBid;
+                        await team.save();
+                        // Marcar transfer como cerrado
+                        t.status = 'closed';
+                        await t.save();
+                    }
+                }, 2 * 60 * 1000);
+            }
+        }, transfer.expiresAt - now);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 // Programar eliminatorias de selecciones nacionales tras la fase de grupos
 async function scheduleNationalTeamKnockouts(season, type) {
     // type: 'mundial' o 'intercontinental'
@@ -446,7 +558,9 @@ async function closeSeasonAndRebuildDivisions(season = 1, region = 'europa') {
 
     // Programar automáticamente competiciones de selecciones nacionales si corresponde
     await scheduleNationalTeamCompetitions(nextSeason);
-
+cd backend
+npm install
+npm start
     // Mover equipos según la lógica de ascensos/descensos/promociones
     for (const oldDiv of oldDivisions) {
         for (let gIdx = 0; gIdx < oldDiv.groups.length; gIdx++) {
@@ -1106,10 +1220,10 @@ app.get('/', (req, res) => {
 
 // Ruta para registrar usuario
 
-// Registro seguro de usuario
+// Registro seguro de usuario y asignación de equipo BOT
 app.post('/api/users', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, country } = req.body;
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) {
             return res.status(400).json({ error: 'Usuario o email ya existe' });
@@ -1117,7 +1231,15 @@ app.post('/api/users', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ username, email, password: hashedPassword });
         await user.save();
-        res.status(201).json({ message: 'Usuario registrado', user: { username, email, _id: user._id } });
+
+        // Buscar el mejor equipo BOT disponible del país (1ª división primero, luego inferiores)
+        const botTeam = await Team.findOne({ owner: null, country }).sort({ division: 1, group: 1 });
+        if (botTeam) {
+            botTeam.owner = user._id;
+            await botTeam.save();
+        }
+
+        res.status(201).json({ message: 'Usuario registrado', user: { username, email, _id: user._id }, team: botTeam });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
