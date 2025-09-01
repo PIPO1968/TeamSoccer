@@ -1,3 +1,6 @@
+// Multi/Match Viewer premium
+const premiumViewer = require('./routes/premiumViewer');
+app.use('/api/premium', auth, premiumViewer);
 // Estadísticas detalladas premium
 const premiumStats = require('./routes/premiumStats');
 app.use('/api/premium', auth, premiumStats);
@@ -72,33 +75,8 @@ app.post('/api/rooms/:id/messages', auth, async (req, res) => {
 // =====================
 // SALAS (ROOMS) PREMIUM
 // =====================
-const Room = require('./models/Room');
-// Crear sala (solo premium)
-app.post('/api/rooms', auth, async (req, res) => {
-    try {
-        const User = require('./models/User');
-        const user = await User.findById(req.user.userId);
-        if (!user || !user.premium) {
-            return res.status(403).json({ error: 'Esto es una opcion premium' });
-        }
-        const { name, type, settings } = req.body;
-        const room = new Room({ name, owner: user._id, isPremium: true, type, settings });
-        await room.save();
-        res.status(201).json({ message: 'Sala creada', room });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
-// Listar salas (todas, públicas)
-app.get('/api/rooms', async (req, res) => {
-    try {
-        const rooms = await Room.find().populate('owner', 'username');
-        res.json(rooms);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+const roomPremiumRoutes = require('./routes/roomPremium');
+app.use('/api/room-premium', auth, roomPremiumRoutes);
 // Endpoint para consultar la vitrina de trofeos de un equipo (solo club, no selecciones)
 app.get('/api/teams/:id/trophies', async (req, res) => {
     try {
@@ -733,9 +711,6 @@ async function closeSeasonAndRebuildDivisions(season = 1, region = 'europa') {
 
     // Programar automáticamente competiciones de selecciones nacionales si corresponde
     await scheduleNationalTeamCompetitions(nextSeason);
-cd backend
-npm install
-npm start
     // Mover equipos según la lógica de ascensos/descensos/promociones
     for (const oldDiv of oldDivisions) {
         for (let gIdx = 0; gIdx < oldDiv.groups.length; gIdx++) {
