@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
     premium: { type: Boolean, default: false },
     premiumUntil: { type: Date },
     tscredits: { type: Number, default: 0 },
-    flags: { type: [String], default: [] } // Códigos de país de banderas conseguidas
+    flags: { type: [String], default: [] }, // Códigos de país de banderas conseguidas
+    lastOnline: { type: Date, default: Date.now } // Fecha/hora de última actividad
 });
 
 module.exports = mongoose.model('User', userSchema);

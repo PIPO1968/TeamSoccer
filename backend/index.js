@@ -1,9 +1,22 @@
+// Middleware para actualizar lastOnline en cada request autenticada
+const User = require('./models/User');
+app.use(async (req, res, next) => {
+    if (req.user && req.user.userId) {
+        try {
+            await User.findByIdAndUpdate(req.user.userId, { lastOnline: new Date() });
+        } catch { }
+    }
+    next();
+});
 // Multi/Match Viewer premium
 const premiumViewer = require('./routes/premiumViewer');
 app.use('/api/premium', auth, premiumViewer);
 // Estadísticas detalladas premium
 const premiumStats = require('./routes/premiumStats');
 app.use('/api/premium', auth, premiumStats);
+// Managers activos y online
+const userStats = require('./routes/userStats');
+app.use('/api/user-stats', userStats);
 // Configurar hora personalizada de partido (solo premium)
 app.put('/api/teams/:id/match-time', auth, async (req, res) => {
     try {

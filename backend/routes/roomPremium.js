@@ -62,9 +62,9 @@ router.post('/room-madness/start', async (req, res) => {
             matches.push({
                 round: 1,
                 homeRoom: shuffled[i]._id,
-                awayRoom: shuffled[i+1]._id,
+                awayRoom: shuffled[i + 1]._id,
                 homeTeamIds: shuffled[i].members,
-                awayTeamIds: shuffled[i+1].members,
+                awayTeamIds: shuffled[i + 1].members,
                 homeGoals: null,
                 awayGoals: null,
                 winner: null,
@@ -127,7 +127,7 @@ router.post('/room-madness/next-round', async (req, res) => {
                 madness.matches.push({
                     round: nextRound,
                     homeRoom: winners[i],
-                    awayRoom: winners[i+1],
+                    awayRoom: winners[i + 1],
                     homeTeamIds: [],
                     awayTeamIds: [],
                     homeGoals: null,
