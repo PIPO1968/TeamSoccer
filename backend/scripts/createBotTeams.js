@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Team = require('../models/Team');
+const Team = require('./Team');
 
 // Lista de equipos BOT por país, división y grupo
 const botTeamsData = [

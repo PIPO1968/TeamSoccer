@@ -1,3 +1,5 @@
+const express = require('express');
+const router = express.Router();
 // Consultar estado actual de Room Madness
 router.get('/room-madness/status', async (req, res) => {
     try {
@@ -231,8 +233,8 @@ router.get('/:roomId/trophy-cabinet', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 const Room = require('../models/Room');
 const User = require('../models/User');
 

@@ -1,3 +1,25 @@
+const auth = require('./middleware/auth');
+const express = require('express');
+const cors = require('cors');
+
+
+const app = require('express')();
+app.use(cors());
+app.use(express.json());
+
+// const PORT = process.env.PORT || 5000;
+// const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
+
+// Modelos
+const User = require('./models/User');
+const Team = require('./models/Team');
+const NationalTeam = require('./models/NationalTeam');
+// const NationalCandidacy = require('./models/NationalCandidacy');
+// const NationalVote = require('./models/NationalVote');
+// const auth = require('./middleware/auth');
+const Match = require('./models/Match');
+// const FriendlyMatch = require('./models/FriendlyMatch');
+
 // =====================
 // PAGOS Y ACTIVACIÓN PREMIUM
 // =====================
@@ -14,7 +36,6 @@ app.use('/api/room-statistics', roomStatisticsRoutes);
 const competitionsRoutes = require('./routes/competitions');
 app.use('/api/competitions', competitionsRoutes);
 // Middleware para actualizar lastOnline en cada request autenticada
-const User = require('./models/User');
 app.use(async (req, res, next) => {
     if (req.user && req.user.userId) {
         try {
@@ -35,8 +56,7 @@ app.use('/api/user-stats', userStats);
 // Configurar hora personalizada de partido (solo premium)
 app.put('/api/teams/:id/match-time', auth, async (req, res) => {
     try {
-        const User = require('./models/User');
-        const Team = require('./models/Team');
+        // const Team = require('./models/Team');
         const user = await User.findById(req.user.userId);
         if (!user || !user.premium) {
             return res.status(403).json({ error: 'Esto es una opcion premium' });
@@ -50,7 +70,7 @@ app.put('/api/teams/:id/match-time', auth, async (req, res) => {
             return res.status(400).json({ error: 'Formato de hora inválido (hh:mm)' });
         }
         // Buscar el próximo partido en casa (cualquier tipo)
-        const Match = require('./models/Match');
+        // const Match = require('./models/Match');
         const now = new Date();
         const nextHomeMatch = await Match.findOne({
             homeTeam: team._id,
@@ -86,7 +106,7 @@ app.get('/api/rooms/:id/messages', async (req, res) => {
 app.post('/api/rooms/:id/messages', auth, async (req, res) => {
     try {
         const Room = require('./models/Room');
-        const User = require('./models/User');
+        // const User = require('./models/User');
         const room = await Room.findById(req.params.id);
         if (!room) return res.status(404).json({ error: 'Sala no encontrada' });
         const user = await User.findById(req.user.userId);
@@ -299,8 +319,8 @@ app.post('/api/transfers/:id/bid', auth, async (req, res) => {
 // Programar eliminatorias de selecciones nacionales tras la fase de grupos
 async function scheduleNationalTeamKnockouts(season, type) {
     // type: 'mundial' o 'intercontinental'
-    const Match = require('./models/Match');
-    const NationalTeam = require('./models/NationalTeam');
+    // const Match = require('./models/Match');
+    // const NationalTeam = require('./models/NationalTeam');
     // Obtener todos los grupos (por cómo se crearon los partidos de grupos)
     // Suponemos que los partidos de grupos ya se han jugado y standings están disponibles
     // 1. Obtener los dos primeros de cada grupo
@@ -702,7 +722,7 @@ app.post('/api/national-teams/assign-manager', async (req, res) => {
 // Automatizar el cierre de temporada: ascensos, descensos, premios, trofeos y semana de descanso
 async function closeSeasonAndRebuildDivisions(season = 1, region = 'europa') {
     const Division = require('./models/Division');
-    const Team = require('./models/Team');
+    // const Team = require('./models/Team');
     // Procesar ascensos, descensos y promociones
     await processPromotionsAndRelegations(season, region);
 
@@ -962,7 +982,7 @@ const Tournament = mongoose.models.Tournament || mongoose.model('Tournament', to
 
 // Middleware para managers premium (genérico)
 async function isPremium(req, res, next) {
-    const User = require('./models/User');
+    // const User = require('./models/User');
     const user = await User.findById(req.user.userId);
     if (!user || !user.premium) {
         return res.status(403).json({ error: 'Solo managers premium pueden acceder a esta función' });
@@ -973,7 +993,7 @@ async function isPremium(req, res, next) {
 // Crear torneo personalizado (solo premium)
 app.post('/api/tournaments', auth, async (req, res) => {
     try {
-        const User = require('./models/User');
+        // const User = require('./models/User');
         const user = await User.findById(req.user.userId);
         if (!user || !user.premium) {
             return res.status(403).json({ error: 'Esto es una opcion premium' });
@@ -1002,7 +1022,7 @@ app.get('/api/tournaments', auth, async (req, res) => {
 
 // Ejemplo de función para obtener campeones de primera división (debería adaptarse a tu modelo real de ligas)
 async function getChampionsCupTeams() {
-    const Team = require('./models/Team');
+    // const Team = require('./models/Team');
     // Aquí deberías filtrar por equipos campeones de 1º división de cada país
     // Por ahora, seleccionamos todos los equipos con un campo ficticio champion=true
     return await Team.find({ champion: true });
@@ -1258,12 +1278,9 @@ app.post('/api/matches/:id/lock-lineup', async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
 
-const app = express();
+
+// const app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -1271,13 +1288,13 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
 
 // Modelos
-const User = require('./models/User');
-const Team = require('./models/Team');
-const NationalTeam = require('./models/NationalTeam');
+// const User = require('./models/User');
+// const Team = require('./models/Team');
+// const NationalTeam = require('./models/NationalTeam');
 const NationalCandidacy = require('./models/NationalCandidacy');
 const NationalVote = require('./models/NationalVote');
-const auth = require('./middleware/auth');
-const Match = require('./models/Match');
+// const auth = require('./middleware/auth');
+// const Match = require('./models/Match');
 const FriendlyMatch = require('./models/FriendlyMatch');
 // Función para obtener el próximo miércoles
 function getNextWednesday() {
@@ -1317,7 +1334,6 @@ app.post('/api/friendlies/request', auth, async (req, res) => {
         await friendly.save();
 
         // Lógica de colección de banderas (solo premium)
-        const User = require('./models/User');
         const requester = await User.findById(req.user.userId);
         const opponent = await User.findById(opponentId);
         if (requester && requester.premium && opponent && opponent.country) {
