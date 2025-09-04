@@ -1,3 +1,18 @@
+// =====================
+// PAGOS Y ACTIVACIÓN PREMIUM
+// =====================
+const paymentRoutes = require('./routes/payment');
+app.use('/api/payment', paymentRoutes);
+// =====================
+// ESTADÍSTICAS DE SALA
+// =====================
+const roomStatisticsRoutes = require('./routes/roomStatistics');
+app.use('/api/room-statistics', roomStatisticsRoutes);
+// =====================
+// COMPETICIONES POR SALA
+// =====================
+const competitionsRoutes = require('./routes/competitions');
+app.use('/api/competitions', competitionsRoutes);
 // Middleware para actualizar lastOnline en cada request autenticada
 const User = require('./models/User');
 app.use(async (req, res, next) => {
@@ -90,6 +105,11 @@ app.post('/api/rooms/:id/messages', auth, async (req, res) => {
 // =====================
 const roomPremiumRoutes = require('./routes/roomPremium');
 app.use('/api/room-premium', auth, roomPremiumRoutes);
+// =====================
+// FORO GENERAL
+// =====================
+const forumRoutes = require('./routes/forum');
+app.use('/api/forum', forumRoutes);
 // Endpoint para consultar la vitrina de trofeos de un equipo (solo club, no selecciones)
 app.get('/api/teams/:id/trophies', async (req, res) => {
     try {
