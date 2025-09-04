@@ -67,6 +67,8 @@ function Teams({ token, onTeamsUpdate, user }) {
         } catch (err) {
             setStatsError(err.message);
         }
+        }
+
         // Utilidad para mostrar emoji de trofeo
         function getTrophyEmoji(type) {
             if (type === 'oro') return '🥇';
@@ -103,10 +105,8 @@ function Teams({ token, onTeamsUpdate, user }) {
                     <input type="time" value={value} onChange={e => setValue(e.target.value)} />
                     <button onClick={handleSave} disabled={loading}>{t.save || 'Guardar'}</button>
                     {msg && <span style={{ marginLeft: 8, color: msg === (t.timeSaved || 'Hora guardada') ? 'green' : 'red' }}>{msg}</span>}
-                </div>
-            );
-        }
-
+            {/* Fin del bloque principal */}
+        );
         return (
             <div>
                 <h3>{t.createTeam || 'Crear equipo'}</h3>
@@ -159,9 +159,9 @@ function Teams({ token, onTeamsUpdate, user }) {
                 {statsError && <div style={{ color: 'red' }}>{statsError}</div>}
             </div>
         )
-    }
-        </div >
-    );
+            </div >
+        );
+}
 }
 
 export default Teams;
