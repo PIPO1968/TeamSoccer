@@ -1,0 +1,1 @@
+Este archivo es un marcador temporal para el favicon. El favicon real debe ser un archivo .ico. Descarga la imagen desde https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png y conviértela a .ico usando un generador online como https://favicon.io/ o https://convertico.com/. Luego reemplaza este archivo por el .ico generado.
