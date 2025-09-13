@@ -3,9 +3,28 @@ const express = require('express');
 const cors = require('cors');
 
 
-const app = require('express')();
+
+const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Integración de Socket.IO
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
+});
+
+// Ejemplo de evento de conexión
+io.on('connection', (socket) => {
+    console.log('Usuario conectado a Socket.IO');
+    // Puedes emitir notificaciones así:
+    // socket.emit('notificacion', { mensaje: '¡Bienvenido a TeamSoccer!' });
+});
 
 // const PORT = process.env.PORT || 5000;
 // const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
@@ -1531,6 +1550,6 @@ app.get('/api/teams', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Servidor backend escuchando en puerto ${PORT}`);
 });
