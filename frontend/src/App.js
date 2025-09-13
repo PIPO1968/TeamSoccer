@@ -1,7 +1,7 @@
-
 import MultiMatchViewer from './MultiMatchViewer';
 import RoomMadnessViewer from './RoomMadnessViewer';
 import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 import './App.css';
 import React, { useState } from 'react';
@@ -272,8 +272,32 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // Estado para notificaciones
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    // Conexión a Socket.IO backend
+    const socket = io('http://localhost:5000');
+    socket.on('connect', () => {
+      setNotification('¡Conectado a notificaciones en tiempo real!');
+    });
+    socket.on('notificacion', (data) => {
+      setNotification(data.mensaje);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <div className="App">
+      {/* Notificación en tiempo real */}
+      {notification && (
+        <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
+          {notification}
+          <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
+        </div>
+      )}
       <header className="App-header" style={{ display: 'flex', alignItems: 'center', gap: 24, justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64, marginRight: 16 }} />
