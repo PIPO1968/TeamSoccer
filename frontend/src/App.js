@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 import './App.css';
-import React, { useState } from 'react';
 
 import Register from './Register';
 import Login from './Login';
