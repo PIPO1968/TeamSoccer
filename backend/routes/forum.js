@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ForumPost = require('../models/ForumPost');
-const { authenticateToken } = require('../middleware/auth');
+const authenticateToken = require('../middleware/auth');
 const User = require('../models/User');
 
 // Obtener todos los posts del foro
