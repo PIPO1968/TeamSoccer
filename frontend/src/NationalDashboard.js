@@ -11,12 +11,12 @@ function NationalDashboard({ token }) {
         async function fetchData() {
             setLoading(true);
             // Obtener partidos de selecciones nacionales
-            const resMatches = await fetch('http://localhost:5000/api/matches');
+            const resMatches = await fetch(`${process.env.REACT_APP_API_URL}/api/matches`);
             const allMatches = await resMatches.json();
             const natMatches = allMatches.filter(m => m.type === 'mundial' || m.type === 'intercontinental');
             setMatches(natMatches);
             // Obtener selecciones nacionales
-            const resNat = await fetch('http://localhost:5000/api/national-teams');
+            const resNat = await fetch(`${process.env.REACT_APP_API_URL}/api/national-teams`);
             const natTeams = await resNat.json();
             setNationalTeams(natTeams);
             setLoading(false);

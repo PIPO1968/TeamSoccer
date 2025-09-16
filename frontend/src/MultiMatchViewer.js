@@ -26,7 +26,7 @@ function MultiMatchViewer({ token, user }) {
             const rivals = rivalMatchIds.split(',').map(id => id.trim()).filter(Boolean);
             ids.push(...rivals);
             if (ids.length === 0) throw new Error('Debes indicar al menos un partido');
-            const res = await fetch('http://localhost:5000/api/premium/viewer', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/premium/viewer`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
                 body: JSON.stringify({ matchIds: ids })

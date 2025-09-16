@@ -12,7 +12,7 @@ function Teams({ token, onTeamsUpdate, user }) {
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/teams')
+    fetch(`${process.env.REACT_APP_API_URL}/api/teams`)
             .then(res => res.json())
             .then(async data => {
                 setTeams(data);
@@ -20,7 +20,7 @@ function Teams({ token, onTeamsUpdate, user }) {
                 // Cargar trofeos de cada equipo
                 const trophiesObj = {};
                 for (const team of data) {
-                    const res = await fetch(`http://localhost:5000/api/teams/${team._id}/trophies`);
+                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teams/${team._id}/trophies`);
                     const trof = await res.json();
                     trophiesObj[team._id] = trof.trophies || [];
                 }
@@ -37,7 +37,7 @@ function Teams({ token, onTeamsUpdate, user }) {
         setError(''); setSuccess('');
         try {
             const playersArr = form.players.split(',').map(p => ({ name: p.trim(), position: '', rating: 50 }));
-            const res = await fetch('http://localhost:5000/api/teams', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teams`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ function Teams({ token, onTeamsUpdate, user }) {
         setStatsError('');
         setDetailedStats(null);
         try {
-            const res = await fetch(`http://localhost:5000/api/premium/team/${teamId}/detailed-stats`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/premium/team/${teamId}/detailed-stats`, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
             const data = await res.json();
@@ -86,7 +86,7 @@ function Teams({ token, onTeamsUpdate, user }) {
             setMsg('');
             setLoading(true);
             try {
-                const res = await fetch(`http://localhost:5000/api/teams/${team._id}/match-time`, {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teams/${team._id}/match-time`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
                     body: JSON.stringify({ preferredMatchTime: value })

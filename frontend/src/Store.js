@@ -21,7 +21,7 @@ function Store({ token, user }) {
 
     useEffect(() => {
         if (!token) return;
-        fetch('http://localhost:5000/api/store/status', {
+    fetch(`${process.env.REACT_APP_API_URL}/api/store/status`, {
             headers: { 'Authorization': 'Bearer ' + token }
         })
             .then(res => res.json())
@@ -30,7 +30,7 @@ function Store({ token, user }) {
 
     const handleBuyPremium = async (months) => {
         setMsg('');
-        const res = await fetch('http://localhost:5000/api/store/premium', {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/store/premium`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
             body: JSON.stringify({ months })
@@ -42,7 +42,7 @@ function Store({ token, user }) {
 
     const handleFreePremium = async () => {
         setMsg('');
-        const res = await fetch('http://localhost:5000/api/store/premium-free', {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/store/premium-free`, {
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + token }
         });
@@ -53,7 +53,7 @@ function Store({ token, user }) {
 
     const handleBuyTS = async (amount) => {
         setMsg('');
-        const res = await fetch('http://localhost:5000/api/store/tscredits', {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/store/tscredits`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
             body: JSON.stringify({ amount })

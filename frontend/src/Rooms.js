@@ -12,7 +12,7 @@ function Rooms({ token, user }) {
     const [loadingTrophy, setLoadingTrophy] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/rooms')
+    fetch(`${process.env.REACT_APP_API_URL}/api/rooms`)
             .then(res => res.json())
             .then(data => setRooms(data));
     }, [msg]);
@@ -21,7 +21,7 @@ function Rooms({ token, user }) {
         e.preventDefault();
         setMsg('');
         try {
-            const res = await fetch('http://localhost:5000/api/rooms', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/rooms`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ function Rooms({ token, user }) {
         setTrophyCabinet(null);
         setLoadingTrophy(true);
         try {
-            const res = await fetch(`http://localhost:5000/api/room-premium/${roomId}/trophy-cabinet`);
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/room-premium/${roomId}/trophy-cabinet`);
             const data = await res.json();
             setTrophyCabinet(data);
         } catch (err) {

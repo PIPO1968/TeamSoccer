@@ -10,7 +10,7 @@ function RoomMadnessViewer() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/room-premium/room-madness/status')
+    fetch(`${process.env.REACT_APP_API_URL}/api/room-premium/room-madness/status`)
             .then(res => res.json())
             .then(data => setStatus(data));
     }, []);
@@ -18,7 +18,7 @@ function RoomMadnessViewer() {
     useEffect(() => {
         if (!selectedRound) return;
         setLoading(true);
-        fetch(`http://localhost:5000/api/room-premium/room-madness/matches/${selectedRound}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/room-premium/room-madness/matches/${selectedRound}`)
             .then(res => res.json())
             .then(data => {
                 setMatches(data.matches || []);

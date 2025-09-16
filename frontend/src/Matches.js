@@ -10,10 +10,10 @@ function Matches({ token }) {
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/teams')
+    fetch(`${process.env.REACT_APP_API_URL}/api/teams`)
             .then(res => res.json())
             .then(data => setTeams(data));
-        fetch('http://localhost:5000/api/matches')
+    fetch(`${process.env.REACT_APP_API_URL}/api/matches`)
             .then(res => res.json())
             .then(data => setMatches(data));
     }, [success]);
@@ -30,7 +30,7 @@ function Matches({ token }) {
             return;
         }
         try {
-            const res = await fetch('http://localhost:5000/api/matches', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/matches`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
