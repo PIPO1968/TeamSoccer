@@ -209,7 +209,7 @@ function App() {
         </div>
         {/* Selector de idioma a la derecha */}
         <div style={{ marginLeft: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
+          <span className="main-choose-language" style={{ fontWeight: 'bold', fontSize: '1rem' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
           <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4 }}>
             <option value="es">Español</option>
             <option value="en">English</option>

@@ -1,3 +1,9 @@
+/* Elige idioma y slogan principal blancos y en negrita */
+.main-slogan,
+.main-choose-language {
+  color: #fff !important;
+  font-weight: bold;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
