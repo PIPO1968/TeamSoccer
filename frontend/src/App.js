@@ -113,7 +113,7 @@ function App() {
   };
 
   // Estado simulado para saber si el usuario sigue en copa (debería venir del backend en el futuro)
-  // const [inCup, setInCup] = useState(false); // Eliminado: no usado
+  // Eliminado: inCup ya no se usa
   // Estado para equipos (para pasar a Friendlies)
   const [teams, setTeams] = useState([]);
 
@@ -322,7 +322,7 @@ function App() {
             ) : !showNational ? (
               <>
                 <Teams token={token} onTeamsUpdate={handleTeamsUpdate} />
-                <Friendlies token={token} userId={user._id} teams={teams} inCup={inCup} />
+                <Friendlies token={token} userId={user._id} teams={teams} />
                 <Matches token={token} />
               </>
             ) : (
