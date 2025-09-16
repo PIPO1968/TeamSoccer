@@ -37,6 +37,15 @@ body {
   box-shadow: 0 2px 16px #ffe06644;
 }
 
+/* Textos principales blancos y en negrita */
+.main-stats,
+.main-date,
+.main-slogan {
+  color: #fff !important;
+  font-weight: bold;
+}
+}
+
 .App-link {
   color: #61dafb;
 }
