@@ -40,6 +40,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -58,6 +59,7 @@ button {
   box-shadow: 0 1px 4px #ffe06633;
   transition: background 0.2s, color 0.2s;
 }
+
 button:hover {
   background: #fffbe6;
   color: #e6b800;
@@ -72,7 +74,8 @@ select {
   font-size: 1rem;
 }
 
-input, textarea {
+input,
+textarea {
   border: 1px solid #ffe066;
   border-radius: 4px;
   padding: 6px 10px;
@@ -97,6 +100,7 @@ input, textarea {
   display: flex;
   align-items: center;
 }
+
 .App .notification button {
   margin-left: 16px;
   background: transparent;
