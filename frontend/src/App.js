@@ -192,22 +192,21 @@ function App() {
         </div>
       )}
       <header className="App-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', minHeight: 80 }}>
-        {/* Logo a la izquierda */}
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64, marginRight: 16 }} />
-        </div>
-        {/* Info alineada a la derecha del logo */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flex: 1 }}>
-          <div style={{ fontWeight: 'bold', fontSize: '1.05rem', color: '#1a2a44', marginBottom: 2 }}>
-            <span style={{ marginRight: 10 }}>
-              {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
-            </span>
-            <span>
-              {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
-            </span>
-          </div>
-          <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#1a2a44' }}>
-            {dateStr} &nbsp; {timeStr}
+        {/* Logo a la izquierda y stats/fecha al centro */}
+        <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start' }}>
+          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64, marginRight: 32 }} />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+            <div className="main-stats">
+              <span style={{ marginRight: 10 }}>
+                {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
+              </span>
+              <span>
+                {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
+              </span>
+            </div>
+            <div className="main-date">
+              {dateStr} &nbsp; {timeStr}
+            </div>
           </div>
         </div>
         {/* Selector de idioma a la derecha */}
@@ -235,7 +234,7 @@ function App() {
         {!user ? (
           <>
             <div style={{ marginBottom: 30 }}>
-              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', marginBottom: 10, color: '#1a2a44', textShadow: '0 1px 6px #fff8' }}>
+              <div className="main-slogan">
                 {translations[language]?.mainSlogan || 'Team Soccer Juego de Manager | Únete al mundo del fútbol gratuito'}
               </div>
               <img
