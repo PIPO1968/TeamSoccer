@@ -170,7 +170,7 @@ function App() {
 
   useEffect(() => {
     // Conexión a Socket.IO backend
-    const socket = io('http://localhost:5000');
+  const socket = io(process.env.REACT_APP_API_URL);
     socket.on('connect', () => {
       setNotification('¡Conectado a notificaciones en tiempo real!');
     });
