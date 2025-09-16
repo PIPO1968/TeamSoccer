@@ -12,7 +12,7 @@ function Teams({ token, onTeamsUpdate, user }) {
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/teams`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/teams`)
             .then(res => res.json())
             .then(async data => {
                 setTeams(data);

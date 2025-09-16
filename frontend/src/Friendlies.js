@@ -12,12 +12,12 @@ function Friendlies({ token, userId, teams, inCup }) {
 
     useEffect(() => {
         if (!token) return;
-    fetch(`${process.env.REACT_APP_API_URL}/api/friendlies`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/friendlies`, {
             headers: { 'Authorization': 'Bearer ' + token }
         })
             .then(res => res.json())
             .then(data => setFriendlies(data));
-    fetch(`${process.env.REACT_APP_API_URL}/api/users`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/users`)
             .then(res => res.json())
             .then(data => setUsers(data));
     }, [token, success]);

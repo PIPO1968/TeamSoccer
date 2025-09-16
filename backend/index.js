@@ -27,8 +27,70 @@ io.on('connection', (socket) => {
     // socket.emit('notificacion', { mensaje: '¡Bienvenido a TeamSoccer!' });
 });
 
-// const PORT = process.env.PORT || 5000;
-// const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
+
+// Solo arrancar el servidor después de conectar a MongoDB
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('MongoDB conectado');
+
+        app.get('/', (req, res) => {
+            res.send('API TeamSoccer funcionando');
+        });
+
+        // Ruta para registrar usuario
+        app.post('/api/users', async (req, res) => {
+            try {
+                const { username, email, password, country } = req.body;
+                const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+                if (existingUser) {
+                    return res.status(400).json({ error: 'Usuario o email ya existe' });
+                }
+                const hashedPassword = await bcrypt.hash(password, 10);
+                const user = new User({ username, email, password: hashedPassword });
+                await user.save();
+
+                // Buscar el mejor equipo BOT disponible del país (1ª división primero, luego inferiores)
+                const botTeam = await Team.findOne({ owner: null, country }).sort({ division: 1, group: 1 });
+                if (botTeam) {
+                    botTeam.owner = user._id;
+                    await botTeam.save();
+                }
+
+                res.status(201).json({ message: 'Usuario registrado', user: { username, email, _id: user._id }, team: botTeam });
+            } catch (error) {
+                res.status(400).json({ error: error.message });
+            }
+        });
+
+        // Login de usuario
+        app.post('/api/login', async (req, res) => {
+            try {
+                const { email, password } = req.body;
+                const user = await User.findOne({ email });
+                if (!user) {
+                    return res.status(400).json({ error: 'Usuario o contraseña incorrectos' });
+                }
+                const isMatch = await bcrypt.compare(password, user.password);
+                if (!isMatch) {
+                    return res.status(400).json({ error: 'Usuario o contraseña incorrectos' });
+                }
+                const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+                res.json({ token, user: { username: user.username, email: user.email, _id: user._id } });
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+
+        server.listen(PORT, () => {
+            console.log(`Servidor backend escuchando en puerto ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error('Error conectando a MongoDB:', err);
+        process.exit(1); // Detener el proceso si no conecta
+    });
 
 // Modelos
 const User = require('./models/User');

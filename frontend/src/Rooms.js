@@ -12,7 +12,7 @@ function Rooms({ token, user }) {
     const [loadingTrophy, setLoadingTrophy] = useState(false);
 
     useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/rooms`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/rooms`)
             .then(res => res.json())
             .then(data => setRooms(data));
     }, [msg]);

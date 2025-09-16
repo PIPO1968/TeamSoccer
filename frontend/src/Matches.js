@@ -10,10 +10,10 @@ function Matches({ token }) {
     const [success, setSuccess] = useState('');
 
     useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/teams`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/teams`)
             .then(res => res.json())
             .then(data => setTeams(data));
-    fetch(`${process.env.REACT_APP_API_URL}/api/matches`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/matches`)
             .then(res => res.json())
             .then(data => setMatches(data));
     }, [success]);

@@ -39,14 +39,14 @@ function CommunityRooms({ token, user }) {
     const [statistics, setStatistics] = useState(null);
 
     useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/rooms`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/rooms`)
             .then(res => res.json())
             .then(data => setRooms(data));
     }, []);
 
     useEffect(() => {
         if (!selectedRoom) return;
-    fetch(`${process.env.REACT_APP_API_URL}/api/rooms/${selectedRoom._id}/messages`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/rooms/${selectedRoom._id}/messages`)
             .then(res => res.json())
             .then(data => setMessages(data.messages || []));
         fetch(`/api/competitions/room/${selectedRoom._id}`)
@@ -60,7 +60,7 @@ function CommunityRooms({ token, user }) {
     const handleSend = async e => {
         e.preventDefault();
         if (!input.trim()) return;
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/rooms/${selectedRoom._id}/messages`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/rooms/${selectedRoom._id}/messages`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
