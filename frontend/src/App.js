@@ -1,7 +1,6 @@
 import MultiMatchViewer from './MultiMatchViewer';
 import RoomMadnessViewer from './RoomMadnessViewer';
 import React, { useState, useEffect } from 'react';
-import { io } from 'socket.io-client';
 
 import './App.css';
 
@@ -168,19 +167,6 @@ function App() {
   // Estado para notificaciones
   const [notification, setNotification] = useState(null);
 
-  useEffect(() => {
-    // Conexión a Socket.IO backend
-  const socket = io(process.env.REACT_APP_API_URL);
-    socket.on('connect', () => {
-      setNotification('¡Conectado a notificaciones en tiempo real!');
-    });
-    socket.on('notificacion', (data) => {
-      setNotification(data.mensaje);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
 
   return (
     <div className="App">
