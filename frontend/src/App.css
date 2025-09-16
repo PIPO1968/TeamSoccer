@@ -69,7 +69,7 @@ button:hover {
 
 select {
   background: #fffbe6;
-  color: #fffbe6;
+  color: #1a2a44;
   border: 1px solid #ffe066;
   border-radius: 4px;
   padding: 4px 8px;
@@ -83,7 +83,7 @@ textarea {
   padding: 6px 10px;
   font-size: 1rem;
   background: #495057;
-  color: #fffbe6;
+  color: #fffbe6 !important;
 }
 
 /* Notificación en tiempo real */
