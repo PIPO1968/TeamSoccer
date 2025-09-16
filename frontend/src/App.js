@@ -55,110 +55,7 @@ function App() {
       welcome: 'Welcome',
       register: 'Register',
       login: 'Login',
-      noAccount: 'Don\'t have an account?',
-      haveAccount: 'Already have an account?',
-      clubs: 'Club Management',
-      national: 'National Teams',
-      store: 'Store',
-      rooms: 'Rooms',
-      community: 'Community',
-      viewer: 'Multi/Match Viewer',
-      madness: 'Room Madness',
-      premium: 'Premium',
-      logout: 'Logout',
-      mainSlogan: 'Team Soccer Manager Game | Join the free football world',
-      buildTrain: 'Build and train your team',
-      developTeam: 'Develop your team through training. Manage your finances. Choose your best players.',
-      competeLeagues: 'Compete in leagues',
-      joinLeagues: 'Join competitive leagues and tournaments. Get promoted to higher divisions.',
-      matchExperience: 'Match experience',
-      liveMatches: 'Watch live matches with our real-time simulator.',
-      communitySection: 'Community',
-      joinCommunity: 'Join a vibrant community of managers from all over the world.'
-    },
-    fr: {
-      chooseLanguage: 'Choisir la langue:',
-      welcome: 'Bienvenue',
-      register: "S'inscrire",
-      login: 'Connexion',
-      noAccount: 'Pas de compte?',
-      haveAccount: 'Vous avez déjà un compte?',
-      clubs: 'Gestion des Clubs',
-      national: 'Équipes Nationales',
-      store: 'Boutique',
-      rooms: 'Salles',
-      community: 'Communauté',
-      viewer: 'Multi/Match Viewer',
-      madness: 'Room Madness',
-      premium: 'Premium',
-      logout: 'Déconnexion',
-      mainSlogan: 'Team Soccer Jeu de Manager | Rejoignez le monde du football gratuit',
-      buildTrain: 'Construisez et entraînez votre équipe',
-      developTeam: 'Développez votre équipe par l’entraînement. Gérez vos finances. Choisissez vos meilleurs joueurs.',
-      competeLeagues: 'Participez aux ligues',
-      joinLeagues: 'Rejoignez des ligues et tournois compétitifs. Montez de division.',
-      matchExperience: 'Expérience de match',
-      liveMatches: 'Regardez des matchs en direct avec notre simulateur en temps réel.',
-      communitySection: 'Communauté',
-      joinCommunity: 'Rejoignez une communauté dynamique de managers du monde entier.'
-    },
-    de: {
-      chooseLanguage: 'Sprache wählen:',
-      welcome: 'Willkommen',
-      register: 'Registrieren',
-      login: 'Anmelden',
-      noAccount: 'Noch kein Konto?',
-      haveAccount: 'Schon ein Konto?',
-      clubs: 'Vereinsverwaltung',
-      national: 'Nationalmannschaften',
-      store: 'Shop',
-      rooms: 'Räume',
-      community: 'Community',
-      viewer: 'Multi/Match Viewer',
-      madness: 'Room Madness',
-      premium: 'Premium',
-      logout: 'Abmelden',
-      mainSlogan: 'Team Soccer Manager-Spiel | Tritt der kostenlosen Fußballwelt bei',
-      buildTrain: 'Baue und trainiere dein Team',
-      developTeam: 'Entwickle dein Team durch Training. Verwalte deine Finanzen. Wähle deine besten Spieler.',
-      competeLeagues: 'Wettkämpfe in Ligen',
-      joinLeagues: 'Tritt Wettbewerbs-Ligen und Turnieren bei. Steige in höhere Divisionen auf.',
-      matchExperience: 'Spielerlebnis',
-      liveMatches: 'Sieh dir Live-Spiele mit unserem Echtzeit-Simulator an.',
-      communitySection: 'Community',
-      joinCommunity: 'Tritt einer lebendigen Community von Managern aus aller Welt bei.'
-    },
-    it: {
-      chooseLanguage: 'Scegli la lingua:',
-      welcome: 'Benvenuto',
-      register: 'Registrati',
-      login: 'Accedi',
-      noAccount: 'Non hai un account?',
-      haveAccount: 'Hai già un account?',
-      clubs: 'Gestione Club',
-      national: 'Nazionali',
-      store: 'Negozio',
-      rooms: 'Stanze',
-      community: 'Comunità',
-      viewer: 'Multi/Match Viewer',
-      madness: 'Room Madness',
-      premium: 'Premium',
-      logout: 'Disconnetti',
-      mainSlogan: 'Team Soccer Gioco Manageriale | Unisciti al mondo del calcio gratuito',
-      buildTrain: 'Costruisci e allena la tua squadra',
-      developTeam: 'Sviluppa la tua squadra con l’allenamento. Gestisci le tue finanze. Scegli i tuoi migliori giocatori.',
-      competeLeagues: 'Competi nei campionati',
-      joinLeagues: 'Partecipa a campionati e tornei competitivi. Scala di divisione.',
-      matchExperience: 'Esperienza di partita',
-      liveMatches: 'Guarda le partite in diretta con il nostro simulatore in tempo reale.',
-      communitySection: 'Comunità',
-      joinCommunity: 'Unisciti a una comunità vivace di manager da tutto il mondo.'
-    },
-    pt: {
-      chooseLanguage: 'Escolha o idioma:',
-      welcome: 'Bem-vindo',
-      register: 'Registrar',
-      login: 'Entrar',
+      // ...existing code...
       noAccount: 'Não tem conta?',
       haveAccount: 'Já tem conta?',
       clubs: 'Gestão de Clubes',
@@ -180,10 +77,7 @@ function App() {
       communitySection: 'Comunidade',
       joinCommunity: 'Junte-se a uma comunidade vibrante de managers de todo o mundo.'
     },
-    fr: { chooseLanguage: 'Choisir la langue:', welcome: 'Bienvenue', register: 'S\'inscrire', login: 'Connexion', noAccount: 'Pas de compte?', haveAccount: 'Vous avez déjà un compte?', clubs: 'Gestion des Clubs', national: 'Équipes Nationales', store: 'Boutique', rooms: 'Salles', community: 'Communauté', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'Premium', logout: 'Déconnexion', mainSlogan: 'Team Soccer Jeu de Manager | Rejoignez le monde du football gratuit' },
-    de: { chooseLanguage: 'Sprache wählen:', welcome: 'Willkommen', register: 'Registrieren', login: 'Anmelden', noAccount: 'Noch kein Konto?', haveAccount: 'Schon ein Konto?', clubs: 'Vereinsverwaltung', national: 'Nationalmannschaften', store: 'Shop', rooms: 'Räume', community: 'Community', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'Premium', logout: 'Abmelden', mainSlogan: 'Team Soccer Manager-Spiel | Tritt der kostenlosen Fußballwelt bei' },
-    it: { chooseLanguage: 'Scegli la lingua:', welcome: 'Benvenuto', register: 'Registrati', login: 'Accedi', noAccount: 'Non hai un account?', haveAccount: 'Hai già un account?', clubs: 'Gestione Club', national: 'Nazionali', store: 'Negozio', rooms: 'Stanze', community: 'Comunità', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'Premium', logout: 'Disconnetti', mainSlogan: 'Team Soccer Gioco Manageriale | Unisciti al mondo del calcio gratuito' },
-    pt: { chooseLanguage: 'Escolha o idioma:', welcome: 'Bem-vindo', register: 'Registrar', login: 'Entrar', noAccount: 'Não tem conta?', haveAccount: 'Já tem conta?', clubs: 'Gestão de Clubes', national: 'Seleções Nacionais', store: 'Loja', rooms: 'Salas', community: 'Comunidade', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'Premium', logout: 'Sair', mainSlogan: 'Team Soccer Jogo de Manager | Junte-se ao mundo do futebol gratuito' },
+  // ...existing code...
     ru: { chooseLanguage: 'Выберите язык:', welcome: 'Добро пожаловать', register: 'Регистрация', login: 'Войти', noAccount: 'Нет аккаунта?', haveAccount: 'Уже есть аккаунт?', clubs: 'Управление клубом', national: 'Сборные', store: 'Магазин', rooms: 'Комнаты', community: 'Сообщество', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'Премиум', logout: 'Выйти', mainSlogan: 'Team Soccer Менеджер | Присоединяйтесь к миру бесплатного футбола' },
     zh: { chooseLanguage: '选择语言:', welcome: '欢迎', register: '注册', login: '登录', noAccount: '没有账号?', haveAccount: '已有账号?', clubs: '俱乐部管理', national: '国家队', store: '商店', rooms: '房间', community: '社区', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: '高级', logout: '退出', mainSlogan: 'Team Soccer 管理游戏 | 加入免费的足球世界' },
     ja: { chooseLanguage: '言語を選択:', welcome: 'ようこそ', register: '登録', login: 'ログイン', noAccount: 'アカウントをお持ちでない?', haveAccount: 'すでにアカウントをお持ちですか?', clubs: 'クラブ管理', national: 'ナショナルチーム', store: 'ストア', rooms: 'ルーム', community: 'コミュニティ', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'プレミアム', logout: 'ログアウト', mainSlogan: 'Team Soccer マネージャーゲーム | 無料サッカーの世界に参加しよう' },
@@ -219,7 +113,7 @@ function App() {
   };
 
   // Estado simulado para saber si el usuario sigue en copa (debería venir del backend en el futuro)
-  const [inCup, setInCup] = useState(false);
+  // const [inCup, setInCup] = useState(false); // Eliminado: no usado
   // Estado para equipos (para pasar a Friendlies)
   const [teams, setTeams] = useState([]);
 
@@ -297,24 +191,27 @@ function App() {
           <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
         </div>
       )}
-      <header className="App-header" style={{ display: 'flex', alignItems: 'center', gap: 24, justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+      <header className="App-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', minHeight: 80 }}>
+        {/* Logo a la izquierda */}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64, marginRight: 16 }} />
         </div>
-        {/* Managers activos y online a la izquierda de la fecha/hora */}
-        <div style={{ minWidth: 180, textAlign: 'right', fontWeight: 'bold', fontSize: '1.05rem', color: '#1a2a44' }}>
-          <span style={{ marginRight: 10 }}>
-            {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
-          </span>
-          <span>
-            {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
-          </span>
+        {/* Info alineada a la derecha del logo */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flex: 1 }}>
+          <div style={{ fontWeight: 'bold', fontSize: '1.05rem', color: '#1a2a44', marginBottom: 2 }}>
+            <span style={{ marginRight: 10 }}>
+              {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
+            </span>
+            <span>
+              {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
+            </span>
+          </div>
+          <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#1a2a44' }}>
+            {dateStr} &nbsp; {timeStr}
+          </div>
         </div>
-        {/* Fecha y hora en el centro */}
-        <div style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: '1.1rem', color: '#1a2a44' }}>
-          {dateStr} &nbsp; {timeStr}
-        </div>
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Selector de idioma a la derecha */}
+        <div style={{ marginLeft: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
           <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4 }}>
             <option value="es">Español</option>
