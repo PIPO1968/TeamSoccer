@@ -4,22 +4,24 @@ import { useLanguage } from './LanguageContext';
 import Forum from './Forum';
 import GlobalCompetitions from './GlobalCompetitions';
 
-const { t } = useLanguage();
-const [view, setView] = useState('foro');
+function Community({ token, user }) {
+    const { t } = useLanguage();
+    const [view, setView] = useState('foro');
 
-return (
-    <div>
-        <h2>{t.community || 'Comunidad'}</h2>
-        <nav style={{ marginBottom: 20 }}>
-            <button onClick={() => setView('foro')}>{t.forum || 'Foro'}</button>
-            <button onClick={() => setView('salas')}>{t.rooms || 'Salas'}</button>
-            <button onClick={() => setView('competiciones')}>{t.globalCompetitions || 'Competiciones de Salas'}</button>
-        </nav>
-        {view === 'foro' && <Forum token={token} user={user} />}
-        {view === 'salas' && <CommunityRooms token={token} user={user} />}
-        {view === 'competiciones' && <GlobalCompetitions token={token} user={user} />}
-    </div>
-);
+    return (
+        <div>
+            <h2>{t.community || 'Comunidad'}</h2>
+            <nav style={{ marginBottom: 20 }}>
+                <button onClick={() => setView('foro')}>{t.forum || 'Foro'}</button>
+                <button onClick={() => setView('salas')}>{t.rooms || 'Salas'}</button>
+                <button onClick={() => setView('competiciones')}>{t.globalCompetitions || 'Competiciones de Salas'}</button>
+            </nav>
+            {view === 'foro' && <Forum token={token} user={user} />}
+            {view === 'salas' && <CommunityRooms token={token} user={user} />}
+            {view === 'competiciones' && <GlobalCompetitions token={token} user={user} />}
+        </div>
+    );
+}
 // ...existing code...
 
 function CommunityRooms({ token, user }) {

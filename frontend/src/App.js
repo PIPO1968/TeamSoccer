@@ -77,7 +77,7 @@ function App() {
       communitySection: 'Comunidade',
       joinCommunity: 'Junte-se a uma comunidade vibrante de managers de todo o mundo.'
     },
-  // ...existing code...
+    // ...existing code...
     ru: { chooseLanguage: 'Выберите язык:', welcome: 'Добро пожаловать', register: 'Регистрация', login: 'Войти', noAccount: 'Нет аккаунта?', haveAccount: 'Уже есть аккаунт?', clubs: 'Управление клубом', national: 'Сборные', store: 'Магазин', rooms: 'Комнаты', community: 'Сообщество', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'Премиум', logout: 'Выйти', mainSlogan: 'Team Soccer Менеджер | Присоединяйтесь к миру бесплатного футбола' },
     zh: { chooseLanguage: '选择语言:', welcome: '欢迎', register: '注册', login: '登录', noAccount: '没有账号?', haveAccount: '已有账号?', clubs: '俱乐部管理', national: '国家队', store: '商店', rooms: '房间', community: '社区', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: '高级', logout: '退出', mainSlogan: 'Team Soccer 管理游戏 | 加入免费的足球世界' },
     ja: { chooseLanguage: '言語を選択:', welcome: 'ようこそ', register: '登録', login: 'ログイン', noAccount: 'アカウントをお持ちでない?', haveAccount: 'すでにアカウントをお持ちですか?', clubs: 'クラブ管理', national: 'ナショナルチーム', store: 'ストア', rooms: 'ルーム', community: 'コミュニティ', viewer: 'Multi/Match Viewer', madness: 'Room Madness', premium: 'プレミアム', logout: 'ログアウト', mainSlogan: 'Team Soccer マネージャーゲーム | 無料サッカーの世界に参加しよう' },
