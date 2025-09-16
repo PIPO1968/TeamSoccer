@@ -37,11 +37,20 @@ body {
 }
 
 /* Textos principales blancos y en negrita */
-.main-stats,
-.main-date,
-.main-slogan {
-  color: #fff !important;
+/* Info principal del header: texto blanco, negrita y tamaño pequeño */
+.main-header-info {
+  color: #fff;
   font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.main-header-info .main-stats,
+.main-header-info .main-date {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
 }
 }
 

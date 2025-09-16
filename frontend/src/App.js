@@ -195,18 +195,16 @@ function App() {
         {/* Logo a la izquierda y stats/fecha al centro */}
         <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start' }}>
           <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64, marginRight: 32 }} />
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
-            <div className="main-stats">
-              <span style={{ marginRight: 10 }}>
-                {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
-              </span>
-              <span>
-                {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
-              </span>
-            </div>
-            <div className="main-date">
-              {dateStr} &nbsp; {timeStr}
-            </div>
+          <div className="main-header-info" style={{ display: 'flex', alignItems: 'center', fontSize: '1rem', fontWeight: 'bold', color: '#fff', gap: 18 }}>
+            <span className="main-stats">
+              {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
+            </span>
+            <span className="main-stats">
+              {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
+            </span>
+            <span className="main-date">
+              {dateStr} {timeStr}
+            </span>
           </div>
         </div>
         {/* Selector de idioma a la derecha */}
