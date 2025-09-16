@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #ced4da;
+  background-color: #212529;
   min-height: 100vh;
 }
 
@@ -25,7 +25,7 @@ body {
 }
 
 .App-header {
-  background: #ced4da;
+  background: #212529;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
