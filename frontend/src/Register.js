@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useLanguage } from './LanguageContext';
 // Lista de países (ISO 3166)
 const countries = [
     'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
