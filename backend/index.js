@@ -27,8 +27,8 @@ io.on('connection', (socket) => {
     // socket.emit('notificacion', { mensaje: '¡Bienvenido a TeamSoccer!' });
 });
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
+// const PORT = process.env.PORT || 5000;
+// const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
 
 // Solo arrancar el servidor después de conectar a MongoDB
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
