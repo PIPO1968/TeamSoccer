@@ -1509,13 +1509,7 @@ app.get('/api/matches', async (req, res) => {
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB conectado'))
-    .catch((err) => console.error('Error conectando a MongoDB:', err));
-
-app.get('/', (req, res) => {
-    res.send('API TeamSoccer funcionando');
-});
+// (Eliminado: bloque duplicado de conexión y ruta raíz)
 
 // Ruta para registrar usuario
 
