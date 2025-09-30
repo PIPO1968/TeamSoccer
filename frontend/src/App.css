@@ -1,42 +1,41 @@
+
 /* Elige idioma y slogan principal blancos y en negrita */
 .main-slogan,
 .main-choose-language {
   color: #fff !important;
   font-weight: bold;
+}
 
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #495057;
+  /* azul oscuro */
+  color: #1a2a44;
+  min-height: 100vh;
+}
 
-
-
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #495057;
-    /* azul oscuro */
-    color: #1a2a44;
-    min-height: 100vh;
-  }
-
-  .App-header {
-    background: #1a2a44;
-    color: #fff;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    font-size: calc(10px + 2vmin);
-    box-shadow: 0 2px 16px #ffe06644;
-    width: 100%;
-    min-height: 72px;
-    padding: 0 32px 0 16px;
-    /* padding izquierdo añadido */
-    border-bottom: 2px solid #cfd3da;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
+.App-header {
+  background: #1a2a44;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  box-shadow: 0 2px 16px #ffe06644;
+  width: 100%;
+  min-height: 72px;
+  padding: 0 32px 0 16px;
+  /* padding izquierdo añadido */
+  border-bottom: 2px solid #cfd3da;
+  box-sizing: border-box;
+  overflow: hidden;
+}
 
   .header-logo-container {
     display: flex;
