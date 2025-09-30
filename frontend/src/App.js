@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PublicLanding from './PublicLanding';
 import Home from './Home';
 import ClubSetup from './ClubSetup';
 import MultiMatchViewer from './MultiMatchViewer';
@@ -93,69 +95,76 @@ function App() {
 
 
   return (
-    <div className="App">
-      {/* Notificación en tiempo real */}
-      {notification && (
-        <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
-          {notification}
-          <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
-        </div>
-      )}
-      <header className="App-header">
-        <div className="header-logo-container">
-          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" className="header-logo-img" />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, minWidth: 180 }}>
-          <div className="main-header-info" style={{ display: 'flex', alignItems: 'center', fontSize: '1rem', fontWeight: 'bold', color: '#fff', gap: 32, justifyContent: 'center', width: '100%' }}>
-            <span className="main-stats">Usuarios: {activeManagers}</span>
-            <span className="main-stats">Online: {onlineManagers}</span>
-            <span className="main-date">{dateStr} {timeStr}</span>
-          </div>
-        </div>
-        <div style={{ minWidth: 120, maxWidth: 180, marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, flex: '0 0 auto', justifyContent: 'flex-end' }}>
-          <span className="main-choose-language" style={{ fontWeight: 'bold', fontSize: '1rem', color: '#fff' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
-          <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4, maxWidth: 120 }}>
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-            <option value="it">Italiano</option>
-            <option value="pt">Português</option>
-            <option value="ru">Русский</option>
-            <option value="zh">中文</option>
-            <option value="ja">日本語</option>
-            <option value="ar">العربية</option>
-            <option value="tr">Türkçe</option>
-            <option value="hi">हिन्दी</option>
-            <option value="ko">한국어</option>
-            <option value="nl">Nederlands</option>
-            <option value="pl">Polski</option>
-            <option value="id">Bahasa Indonesia</option>
-          </select>
-        </div>
-      </header>
-      <div className="main-content">
-        {!user ? (
-          <div>
-            {showLogin ? (
-              <div>
-                <Login onLogin={handleLogin} />
-                <p>¿No tienes cuenta? <button onClick={() => setShowLogin(false)}>Regístrate</button></p>
-              </div>
-            ) : (
-              <div>
-                <Register onRegister={handleRegister} />
-                <p>¿Ya tienes cuenta? <button onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
+    <Router>
+      <Routes>
+        <Route path="/" element={<PublicLanding />} />
+        <Route path="/login" element={
+          <div className="App">
+            {/* Notificación en tiempo real */}
+            {notification && (
+              <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
+                {notification}
+                <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
               </div>
             )}
+            <header className="App-header">
+              <div className="header-logo-container">
+                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" className="header-logo-img" />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, minWidth: 180 }}>
+                <div className="main-header-info" style={{ display: 'flex', alignItems: 'center', fontSize: '1rem', fontWeight: 'bold', color: '#fff', gap: 32, justifyContent: 'center', width: '100%' }}>
+                  <span className="main-stats">Usuarios: {activeManagers}</span>
+                  <span className="main-stats">Online: {onlineManagers}</span>
+                  <span className="main-date">{dateStr} {timeStr}</span>
+                </div>
+              </div>
+              <div style={{ minWidth: 120, maxWidth: 180, marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, flex: '0 0 auto', justifyContent: 'flex-end' }}>
+                <span className="main-choose-language" style={{ fontWeight: 'bold', fontSize: '1rem', color: '#fff' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
+                <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4, maxWidth: 120 }}>
+                  <option value="es">Español</option>
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
+                  <option value="de">Deutsch</option>
+                  <option value="it">Italiano</option>
+                  <option value="pt">Português</option>
+                  <option value="ru">Русский</option>
+                  <option value="zh">中文</option>
+                  <option value="ja">日本語</option>
+                  <option value="ar">العربية</option>
+                  <option value="tr">Türkçe</option>
+                  <option value="hi">हिन्दी</option>
+                  <option value="ko">한국어</option>
+                  <option value="nl">Nederlands</option>
+                  <option value="pl">Polski</option>
+                  <option value="id">Bahasa Indonesia</option>
+                </select>
+              </div>
+            </header>
+            <div className="main-content">
+              {!user ? (
+                <div>
+                  {showLogin ? (
+                    <div>
+                      <Login onLogin={handleLogin} />
+                      <p>¿No tienes cuenta? <button onClick={() => setShowLogin(false)}>Regístrate</button></p>
+                    </div>
+                  ) : (
+                    <div>
+                      <Register onRegister={handleRegister} />
+                      <p>¿Ya tienes cuenta? <button onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
+                    </div>
+                  )}
+                </div>
+              ) : !clubConfigured ? (
+                <ClubSetup onSetup={handleClubSetup} onLogout={handleLogout} />
+              ) : (
+                <Home user={user} clubData={clubData} onLogout={handleLogout} />
+              )}
+            </div>
           </div>
-        ) : !clubConfigured ? (
-          <ClubSetup onSetup={handleClubSetup} onLogout={handleLogout} />
-        ) : (
-          <Home user={user} clubData={clubData} onLogout={handleLogout} />
-        )}
-      </div>
-    </div>
+        } />
+      </Routes>
+    </Router>
   );
 }
 
