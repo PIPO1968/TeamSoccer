@@ -55,6 +55,8 @@ function App() {
     setClubConfigured(true);
     setClubData(data);
     setNotification('¡Club configurado!');
+    // Redirigir a Home automáticamente
+    window.location.href = '/login';
   };
 
   // Efectos para cargar datos iniciales
@@ -71,11 +73,38 @@ function App() {
   }, []);
 
   // Funciones de login/register/logout
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     setUser(data.user);
     setToken(data.token);
     setShowLogin(false);
     setNotification('¡Bienvenido!');
+    // Consultar al backend si el club ya está configurado
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teams/${data.user.clubId}`, {
+        headers: { Authorization: `Bearer ${data.token}` }
+      });
+      if (res.ok) {
+        const club = await res.json();
+        if (club && club.name) {
+          setClubConfigured(true);
+          setClubData({
+            teamName: club.name,
+            stadiumName: club.stadiumName,
+            city: club.city,
+            country: club.country
+          });
+        } else {
+          setClubConfigured(false);
+          setClubData(null);
+        }
+      } else {
+        setClubConfigured(false);
+        setClubData(null);
+      }
+    } catch (err) {
+      setClubConfigured(false);
+      setClubData(null);
+    }
   };
   const handleRegister = (data) => {
     setUser(data.user);
