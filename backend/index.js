@@ -1,3 +1,4 @@
+// Commit de prueba para forzar despliegue Render
 const mongoose = require('mongoose');
 const auth = require('./middleware/auth');
 const express = require('express');
