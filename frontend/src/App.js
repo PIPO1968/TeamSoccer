@@ -123,10 +123,14 @@ function App() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const resActive = await fetch('/api/user-stats/active');
+        // Detectar si estamos en producción (Vercel) y usar la URL absoluta
+        const backendUrl = process.env.NODE_ENV === 'production'
+          ? 'https://teamsoccer-backend.onrender.com'
+          : '';
+        const resActive = await fetch(`${backendUrl}/api/user-stats/active`);
         const dataActive = await resActive.json();
         setActiveManagers(dataActive.activeManagers || 0);
-        const resOnline = await fetch('/api/user-stats/online');
+        const resOnline = await fetch(`${backendUrl}/api/user-stats/online`);
         const dataOnline = await resOnline.json();
         setOnlineManagers(dataOnline.onlineManagers || 0);
       } catch { }
