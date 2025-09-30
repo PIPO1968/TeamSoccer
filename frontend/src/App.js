@@ -177,10 +177,13 @@ function App() {
           <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
         </div>
       )}
-      <header className="App-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', minHeight: 80 }}>
-        {/* Logo a la izquierda y stats/fecha al centro */}
-        <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start' }}>
-          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64, marginRight: 32 }} />
+      <header className="App-header" style={{ display: 'flex', alignItems: 'center', padding: '0 24px', minHeight: 80, background: '#1a2a44' }}>
+        {/* Logo completamente a la izquierda */}
+        <div style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
+          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64 }} />
+        </div>
+        {/* Info y stats centrados */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
           <div className="main-header-info" style={{ display: 'flex', alignItems: 'center', fontSize: '1rem', fontWeight: 'bold', color: '#fff', gap: 18 }}>
             <span className="main-stats">
               {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
