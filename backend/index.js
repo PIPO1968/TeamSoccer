@@ -33,6 +33,19 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
 
 // Solo arrancar el servidor después de conectar a MongoDB
+        // Endpoint temporal para eliminar usuario y equipo por email (solo pruebas)
+        app.delete('/api/dev/delete-user', async (req, res) => {
+            try {
+                const { email } = req.body;
+                const user = await User.findOne({ email });
+                if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+                await Team.deleteMany({ owner: user._id });
+                await User.deleteOne({ _id: user._id });
+                res.json({ message: 'Usuario y equipos eliminados' });
+            } catch (error) {
+                res.status(400).json({ error: error.message });
+            }
+        });
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB conectado');
@@ -44,7 +57,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
         // Ruta para registrar usuario
         app.post('/api/users', async (req, res) => {
             try {
-                const { username, email, password, country } = req.body;
+                const { username, email, password, country, clubName, stadiumName } = req.body;
                 const existingUser = await User.findOne({ $or: [{ email }, { username }] });
                 if (existingUser) {
                     return res.status(400).json({ error: 'Usuario o email ya existe' });
@@ -53,14 +66,19 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
                 const user = new User({ username, email, password: hashedPassword });
                 await user.save();
 
-                // Buscar el mejor equipo BOT disponible del país (1ª división primero, luego inferiores)
-                const botTeam = await Team.findOne({ owner: null, country }).sort({ division: 1, group: 1 });
-                if (botTeam) {
-                    botTeam.owner = user._id;
-                    await botTeam.save();
-                }
+                // Crear el equipo con los datos del registro
+                const team = new Team({
+                    name: clubName,
+                    stadiumName,
+                    country,
+                    owner: user._id,
+                    division: 1,
+                    group: 1,
+                    players: [],
+                });
+                await team.save();
 
-                res.status(201).json({ message: 'Usuario registrado', user: { username, email, _id: user._id }, team: botTeam });
+                res.status(201).json({ message: 'Usuario y club registrados', user: { username, email, _id: user._id, clubId: team._id }, team });
             } catch (error) {
                 res.status(400).json({ error: error.message });
             }
