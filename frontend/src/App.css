@@ -1,3 +1,15 @@
+input::placeholder {
+  color: #b0b0b0 !important;
+  opacity: 1;
+}
+
+.login-label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: #fff;
+  text-align: left;
+}
 .main-content form {
   display: flex;
   flex-direction: column;
