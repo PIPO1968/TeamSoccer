@@ -1,4 +1,28 @@
-// Estilo para el bloque informativo
+import Home from './Home';
+import ClubSetup from './ClubSetup';
+// Estado para saber si el club está configurado
+const [clubConfigured, setClubConfigured] = useState(false);
+const [clubData, setClubData] = useState(null);
+
+// Simulación: tras login, si no hay club configurado, mostrar ClubSetup
+const handleClubSetup = (data) => {
+  setClubConfigured(true);
+  setClubData(data);
+  setNotification('¡Club configurado!');
+};
+import React, { useState, useEffect } from 'react';
+import MultiMatchViewer from './MultiMatchViewer';
+import RoomMadnessViewer from './RoomMadnessViewer';
+import Login from './Login';
+import Register from './Register';
+import Teams from './Teams';
+import Friendlies from './Friendlies';
+import Matches from './Matches';
+import Store from './Store';
+import Rooms from './Rooms';
+import Community from './Community';
+import NationalDashboard from './NationalDashboard';
+
 const infoBoxStyle = {
   background: '#f7faff',
   borderRadius: '10px',
@@ -10,11 +34,64 @@ const infoBoxStyle = {
   color: '#1a2a44',
   lineHeight: 1.6
 };
-import MultiMatchViewer from './MultiMatchViewer';
-import RoomMadnessViewer from './RoomMadnessViewer';
 
 function App() {
-  // ...existing code...
+  // Estados principales
+  const [notification, setNotification] = useState(null);
+  const [activeManagers, setActiveManagers] = useState(0);
+  const [onlineManagers, setOnlineManagers] = useState(0);
+  const [dateStr, setDateStr] = useState('');
+  const [timeStr, setTimeStr] = useState('');
+  const [language, setLanguage] = useState('es');
+  const [translations, setTranslations] = useState({});
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
+  const [showNational, setShowNational] = useState(false);
+  const [showStore, setShowStore] = useState(false);
+  const [showRooms, setShowRooms] = useState(false);
+  const [showCommunity, setShowCommunity] = useState(false);
+  const [showViewer, setShowViewer] = useState(false);
+  const [showRoomMadness, setShowRoomMadness] = useState(false);
+  const [teams, setTeams] = useState([]);
+
+  // Efectos para cargar datos iniciales
+  useEffect(() => {
+    // Simulación de carga de traducciones
+    setTranslations({});
+    // Simulación de fecha/hora
+    const now = new Date();
+    setDateStr(now.toLocaleDateString());
+    setTimeStr(now.toLocaleTimeString());
+    // Simulación de stats
+    setActiveManagers(123);
+    setOnlineManagers(45);
+  }, []);
+
+  // Funciones de login/register/logout
+  const handleLogin = (data) => {
+    setUser(data.user);
+    setToken(data.token);
+    setShowLogin(false);
+    setNotification('¡Bienvenido!');
+  };
+  const handleRegister = (data) => {
+    setUser(data.user);
+    setToken(data.token);
+    setShowLogin(false);
+    setNotification('¡Registro exitoso!');
+  };
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    setShowLogin(true);
+    setNotification('Sesión cerrada');
+  };
+  const handleTeamsUpdate = (teamsList) => {
+    setTeams(teamsList);
+  };
+
+
   return (
     <div className="App">
       {/* Notificación en tiempo real */}
@@ -60,78 +137,22 @@ function App() {
       <div className="main-content">
         {!user ? (
           <div>
-            <div style={{ marginBottom: 30 }}>
-              <div className="main-slogan">
-                {translations[language]?.mainSlogan || 'Team Soccer Juego de Manager | Únete al mundo del fútbol gratuito'}
+            {showLogin ? (
+              <div>
+                <Login onLogin={handleLogin} />
+                <p>¿No tienes cuenta? <button onClick={() => setShowLogin(false)}>Regístrate</button></p>
               </div>
-              <img
-                src="https://www.teamsoccer.org/teamsoccer-assets/06dfc4b1-c0ea-4de3-af56-84bcea0a199e.png"
-                alt="TeamSoccer"
-                style={{ maxWidth: '90vw', maxHeight: 320, borderRadius: 12, boxShadow: '0 2px 12px #0002', cursor: 'pointer' }}
-                onClick={() => window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')}
-                title="Haz clic para ver el video de presentación"
-              />
-            </div>
-            <div style={infoBoxStyle}>
-              <div style={{ marginBottom: 10, fontWeight: 600 }}>{translations[language]?.buildTrain || 'Construye y entrena tu equipo'}</div>
-              <div style={{ marginBottom: 16 }}>{translations[language]?.developTeam || 'Desarrolla tu equipo mediante entrenamiento. Gestiona tus finanzas. Elige tus mejores jugadores.'}</div>
-              <div style={{ marginBottom: 10, fontWeight: 600 }}>{translations[language]?.competeLeagues || 'Compite en ligas'}</div>
-              <div style={{ marginBottom: 16 }}>{translations[language]?.joinLeagues || 'Únete a ligas competitivas y torneos. Asciende de división.'}</div>
-              <div style={{ marginBottom: 10, fontWeight: 600 }}>{translations[language]?.matchExperience || 'Experiencia de partido'}</div>
-              <div style={{ marginBottom: 16 }}>{translations[language]?.liveMatches || 'Observa partidos en vivo con nuestro simulador en tiempo real.'}</div>
-              <div style={{ marginBottom: 10, fontWeight: 600 }}>{translations[language]?.communitySection || 'Comunidad'}</div>
-              <div>{translations[language]?.joinCommunity || 'Únete a una comunidad vibrante de managers de todo el mundo.'}</div>
-            </div>
-            <div>
-              {showLogin ? (
-                <div>
-                  <Login onLogin={handleLogin} />
-                  <p>¿No tienes cuenta? <button onClick={() => setShowLogin(false)}>Regístrate</button></p>
-                </div>
-              ) : (
-                <div>
-                  <Register onRegister={handleRegister} />
-                  <p>¿Ya tienes cuenta? <button onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
-                </div>
-              )}
-            </div>
+            ) : (
+              <div>
+                <Register onRegister={handleRegister} />
+                <p>¿Ya tienes cuenta? <button onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
+              </div>
+            )}
           </div>
+        ) : !clubConfigured ? (
+          <ClubSetup onSetup={handleClubSetup} onLogout={handleLogout} />
         ) : (
-          <div>
-            <h2>Bienvenido, {user.username}</h2>
-            <button onClick={handleLogout}>Cerrar sesión</button>
-            <nav style={{ marginBottom: 20 }}>
-              <button onClick={() => { setShowNational(false); setShowStore(false); setShowRooms(false); setShowCommunity(false); setShowViewer(false); setShowRoomMadness(false); }}>Gestión de Clubes</button>
-              <button onClick={() => { setShowNational(true); setShowStore(false); setShowRooms(false); setShowCommunity(false); setShowViewer(false); setShowRoomMadness(false); }}>Selecciones Nacionales</button>
-              <button onClick={() => { setShowStore(true); setShowNational(false); setShowRooms(false); setShowCommunity(false); setShowViewer(false); setShowRoomMadness(false); }}>Tienda</button>
-              <button onClick={() => { setShowRooms(true); setShowStore(false); setShowNational(false); setShowCommunity(false); setShowViewer(false); setShowRoomMadness(false); }}>Salas</button>
-              <button onClick={() => { setShowCommunity(true); setShowRooms(false); setShowStore(false); setShowNational(false); setShowViewer(false); setShowRoomMadness(false); }}>Comunidad</button>
-              <button onClick={() => { setShowViewer(true); setShowCommunity(false); setShowRooms(false); setShowStore(false); setShowNational(false); setShowRoomMadness(false); }}>Multi/Match Viewer</button>
-              <button onClick={() => { setShowRoomMadness(true); setShowViewer(false); setShowCommunity(false); setShowRooms(false); setShowStore(false); setShowNational(false); }}>Room Madness</button>
-              {user?.premium && <span style={{ marginLeft: 10, color: 'gold', fontWeight: 'bold' }}>👑 Premium</span>}
-            </nav>
-            <div>
-              {showRoomMadness ? (
-                <RoomMadnessViewer />
-              ) : showViewer ? (
-                <MultiMatchViewer token={token} user={user} />
-              ) : showCommunity ? (
-                <Community token={token} user={user} />
-              ) : showRooms ? (
-                <Rooms token={token} user={user} />
-              ) : showStore ? (
-                <Store token={token} user={user} />
-              ) : !showNational ? (
-                <div>
-                  <Teams token={token} onTeamsUpdate={handleTeamsUpdate} />
-                  <Friendlies token={token} userId={user._id} teams={teams} />
-                  <Matches token={token} />
-                </div>
-              ) : (
-                <NationalDashboard token={token} />
-              )}
-            </div>
-          </div>
+          <Home user={user} clubData={clubData} onLogout={handleLogout} />
         )}
       </div>
     </div>
