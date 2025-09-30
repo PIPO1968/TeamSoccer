@@ -78,8 +78,11 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
                 if (!isMatch) {
                     return res.status(400).json({ error: 'Usuario o contraseña incorrectos' });
                 }
+                // Buscar el equipo del usuario
+                const team = await Team.findOne({ owner: user._id });
+                const clubId = team ? team._id : null;
                 const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
-                res.json({ token, user: { username: user.username, email: user.email, _id: user._id } });
+                res.json({ token, user: { username: user.username, email: user.email, _id: user._id, clubId } });
             } catch (error) {
                 res.status(500).json({ error: error.message });
             }
