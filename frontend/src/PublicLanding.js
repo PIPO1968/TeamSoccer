@@ -10,7 +10,6 @@ function PublicLanding() {
     const now = new Date();
     setDateStr(now.toLocaleDateString());
     setTimeStr(now.toLocaleTimeString());
-    // Simulación de stats
     setActiveManagers(123);
     setOnlineManagers(45);
   }, []);
@@ -51,9 +50,10 @@ function PublicLanding() {
       </header>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 80px)' }}>
         <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 180, margin: '48px 0 24px 0' }} />
-        <h1 style={{ color: '#fff', fontSize: '2.4rem', marginBottom: 16 }}>Bienvenido a TeamSoccer</h1>
-        <p style={{ color: '#fff', fontSize: '1.2rem', marginBottom: 32 }}>¡El manager de fútbol online más completo!<br />Crea tu club, compite y haz historia.</p>
-        <a href="/login"><button style={{ marginTop: 8, padding: '12px 32px', fontSize: '1.2rem', borderRadius: 8, background: '#eaeaea', color: '#1a2a44', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Iniciar sesión</button></a>
+        <h2 style={{ color: '#1a2a44', marginBottom: 16 }}>Bienvenido a TeamSoccer</h2>
+        <p style={{ color: '#1a2a44', fontSize: '1.1rem', marginBottom: 24 }}>¡Regístrate o inicia sesión para crear tu club y empezar a competir!</p>
+        <a href="/login"><button style={{ width: '100%', marginBottom: 12, padding: '12px 0', fontSize: '1.1rem', borderRadius: 8, background: '#1a2a44', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Iniciar sesión</button></a>
+        <a href="/register"><button style={{ width: '100%', padding: '12px 0', fontSize: '1.1rem', borderRadius: 8, background: '#eaeaea', color: '#1a2a44', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Registrarse</button></a>
       </div>
     </div>
   );
