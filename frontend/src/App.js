@@ -1,16 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import Home from './Home';
 import ClubSetup from './ClubSetup';
-// Estado para saber si el club está configurado
-const [clubConfigured, setClubConfigured] = useState(false);
-const [clubData, setClubData] = useState(null);
-
-// Simulación: tras login, si no hay club configurado, mostrar ClubSetup
-const handleClubSetup = (data) => {
-  setClubConfigured(true);
-  setClubData(data);
-  setNotification('¡Club configurado!');
-};
-import React, { useState, useEffect } from 'react';
 import MultiMatchViewer from './MultiMatchViewer';
 import RoomMadnessViewer from './RoomMadnessViewer';
 import Login from './Login';
@@ -54,6 +44,16 @@ function App() {
   const [showViewer, setShowViewer] = useState(false);
   const [showRoomMadness, setShowRoomMadness] = useState(false);
   const [teams, setTeams] = useState([]);
+  // Estado para saber si el club está configurado
+  const [clubConfigured, setClubConfigured] = useState(false);
+  const [clubData, setClubData] = useState(null);
+
+  // Simulación: tras login, si no hay club configurado, mostrar ClubSetup
+  const handleClubSetup = (data) => {
+    setClubConfigured(true);
+    setClubData(data);
+    setNotification('¡Club configurado!');
+  };
 
   // Efectos para cargar datos iniciales
   useEffect(() => {
