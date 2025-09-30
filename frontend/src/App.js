@@ -149,22 +149,10 @@ function App() {
           <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
         </div>
       )}
-      <header className="App-header" style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'nowrap',
-        padding: '0 32px',
-        minHeight: 72,
-        background: 'linear-gradient(90deg, #e0e4ef 60%, #cfd3da 100%)',
-        borderBottom: '2px solid #e0e4ef',
-        boxShadow: '0 2px 8px #0002',
-        gap: 0,
-        width: '100%'
-      }}>
+      <header className="App-header">
         {/* Logo completamente a la izquierda */}
-        <div style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto', minWidth: 64, maxWidth: 80, justifyContent: 'flex-start' }}>
-          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64 }} />
+        <div className="header-logo-container">
+          <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" className="header-logo-img" />
         </div>
         {/* Info y stats centrados */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, minWidth: 180 }}>
