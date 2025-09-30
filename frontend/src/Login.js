@@ -30,8 +30,10 @@ function Login({ onLogin }) {
     return (
         <form onSubmit={handleSubmit}>
             <h2>{t.login || 'Iniciar Sesión'}</h2>
-            <input name="email" type="email" placeholder={t.email || 'Email'} value={form.email} onChange={handleChange} required />
-            <input name="password" type="password" placeholder={t.password || 'Contraseña'} value={form.password} onChange={handleChange} required />
+            <label className="login-label" htmlFor="login-email">{t.email || 'Email'}</label>
+            <input id="login-email" name="email" type="email" placeholder={t.email || 'Email'} value={form.email} onChange={handleChange} required />
+            <label className="login-label" htmlFor="login-password">{t.password || 'Contraseña'}</label>
+            <input id="login-password" name="password" type="password" placeholder={t.password || 'Contraseña'} value={form.password} onChange={handleChange} required />
             <button type="submit">{t.loginBtn || t.login || 'Entrar'}</button>
             {error && <div style={{ color: 'red' }}>{error}</div>}
         </form>
