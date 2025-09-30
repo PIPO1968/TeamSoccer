@@ -215,6 +215,31 @@ app.use('/api/room-premium', auth, roomPremiumRoutes);
 const forumRoutes = require('./routes/forum');
 app.use('/api/forum', forumRoutes);
 // Endpoint para consultar la vitrina de trofeos de un equipo (solo club, no selecciones)
+// Endpoint para consultar la información completa de un equipo (club)
+app.get('/api/teams/:id', async (req, res) => {
+    try {
+        const Team = require('./models/Team');
+        const team = await Team.findById(req.params.id).populate('owner', 'username email');
+        if (!team) return res.status(404).json({ error: 'Equipo no encontrado' });
+        // Devolver toda la info relevante del club
+        res.json({
+            _id: team._id,
+            name: team.name,
+            owner: team.owner,
+            country: team.country,
+            division: team.division,
+            group: team.group,
+            createdAt: team.createdAt,
+            players: team.players,
+            lastTrainingWeek: team.lastTrainingWeek,
+            preferredMatchTime: team.preferredMatchTime,
+            trophies: team.trophies
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+// Endpoint para consultar la vitrina de trofeos de un equipo (solo club, no selecciones)
 app.get('/api/teams/:id/trophies', async (req, res) => {
     try {
         const Team = require('./models/Team');
