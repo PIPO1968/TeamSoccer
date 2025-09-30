@@ -1608,6 +1608,4 @@ app.get('/api/teams', async (req, res) => {
     }
 });
 
-server.listen(PORT, () => {
-    console.log(`Servidor backend escuchando en puerto ${PORT}`);
-});
+// (Eliminado: llamada duplicada a server.listen)
