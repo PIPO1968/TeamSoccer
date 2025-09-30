@@ -1,3 +1,12 @@
+/* Centrar el contenido principal del body */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 70vh;
+  width: 100%;
+}
 
 /* Elige idioma y slogan principal blancos y en negrita */
 .main-slogan,

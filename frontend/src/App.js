@@ -194,7 +194,7 @@ function App() {
 
       {/* Contenido principal fuera del header */}
       {!user ? (
-        <>
+        <div className="main-content">
           <div style={{ marginBottom: 30 }}>
             <div className="main-slogan">
               {translations[language]?.mainSlogan || 'Team Soccer Juego de Manager | Únete al mundo del fútbol gratuito'}
@@ -255,7 +255,7 @@ function App() {
               <p>¿Ya tienes cuenta? <button onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
             </>
           )}
-        </>
+        </div>
       ) : (
         <>
           <h2>Bienvenido, {user.username}</h2>
