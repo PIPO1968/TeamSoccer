@@ -3,42 +3,42 @@
 .main-choose-language {
   color: #fff !important;
   font-weight: bold;
-}
 
 
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #495057;
-  /* azul oscuro */
-  color: #1a2a44;
-  min-height: 100vh;
-}
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #495057;
+    /* azul oscuro */
+    color: #1a2a44;
+    min-height: 100vh;
   }
-}
 
-.App-header {
-  background: #1a2a44;
+  .App-header {
+    background: #1a2a44;
+    color: #1a2a44;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    box-shadow: 0 2px 16px #ffe06644;
+    width: 100%;
+    min-height: 72px;
+    padding: 0 32px;
+    border-bottom: 2px solid #cfd3da;
+  }
 
-  /* azul oscuro */
+  /* Labels de login en negrita */
+  .login-label {
+    font-weight: bold;
+  }
+
   /* Labels de login en negrita */
   .login-label {
     font-weight: bold;
