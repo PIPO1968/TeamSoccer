@@ -149,19 +149,31 @@ function App() {
           <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
         </div>
       )}
-      <header className="App-header" style={{ display: 'flex', alignItems: 'center', padding: '0 24px', minHeight: 80, background: '#1a2a44' }}>
+      <header className="App-header" style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'nowrap',
+        padding: '0 32px',
+        minHeight: 72,
+        background: 'linear-gradient(90deg, #e0e4ef 60%, #cfd3da 100%)',
+        borderBottom: '2px solid #e0e4ef',
+        boxShadow: '0 2px 8px #0002',
+        gap: 0,
+        width: '100%'
+      }}>
         {/* Logo completamente a la izquierda */}
-        <div style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto', minWidth: 64, maxWidth: 80, justifyContent: 'flex-start' }}>
           <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ height: 64 }} />
         </div>
         {/* Info y stats centrados */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-          <div className="main-header-info" style={{ display: 'flex', alignItems: 'center', fontSize: '1rem', fontWeight: 'bold', color: '#fff', gap: 18 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, minWidth: 180 }}>
+          <div className="main-header-info" style={{ display: 'flex', alignItems: 'center', fontSize: '1rem', fontWeight: 'bold', color: '#fff', gap: 32, justifyContent: 'center', width: '100%' }}>
             <span className="main-stats">
-              {translations[language]?.activeManagers || 'Managers activos'}: {activeManagers}
+              Usuarios: {activeManagers}
             </span>
             <span className="main-stats">
-              {translations[language]?.onlineManagers || 'Managers online'}: {onlineManagers}
+              Online: {onlineManagers}
             </span>
             <span className="main-date">
               {dateStr} {timeStr}
@@ -169,9 +181,9 @@ function App() {
           </div>
         </div>
         {/* Selector de idioma a la derecha */}
-        <div style={{ marginLeft: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="main-choose-language" style={{ fontWeight: 'bold', fontSize: '1rem' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
-          <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4 }}>
+        <div style={{ minWidth: 120, maxWidth: 180, marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, flex: '0 0 auto', justifyContent: 'flex-end' }}>
+          <span className="main-choose-language" style={{ fontWeight: 'bold', fontSize: '1rem', color: '#fff' }}>{translations[language]?.chooseLanguage || 'Choose language:'}</span>
+          <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4, maxWidth: 120 }}>
             <option value="es">Español</option>
             <option value="en">English</option>
             <option value="fr">Français</option>
