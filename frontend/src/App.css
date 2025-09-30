@@ -5,11 +5,12 @@ input::placeholder {
 
 .login-label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
   font-weight: bold;
-  color: #fff;
+  color: #b0b0b0;
   text-align: left;
 }
+
 .main-content form {
   display: flex;
   flex-direction: column;
@@ -24,6 +25,7 @@ input::placeholder {
   text-align: center;
   width: 100%;
 }
+
 /* Centrar el contenido principal del body */
 .main-content {
   display: flex;
