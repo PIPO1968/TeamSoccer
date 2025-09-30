@@ -1,3 +1,17 @@
+.main-content form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.main-content h2 {
+  text-align: center;
+  width: 100%;
+}
 /* Centrar el contenido principal del body */
 .main-content {
   display: flex;
@@ -9,7 +23,7 @@
   margin: 0 auto;
 }
 
-.main-content > div {
+.main-content>div {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -59,121 +73,121 @@ body {
   overflow: hidden;
 }
 
-  .header-logo-container {
-    display: flex;
-    align-items: center;
-    min-width: 64px;
-    max-width: 80px;
-    justify-content: flex-start;
-    padding-left: 0;
-    box-sizing: border-box;
-    overflow: hidden;
+.header-logo-container {
+  display: flex;
+  align-items: center;
+  min-width: 64px;
+  max-width: 80px;
+  justify-content: flex-start;
+  padding-left: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.header-logo-img {
+  height: 64px;
+  max-width: 100%;
+  margin-left: 0;
+  padding-left: 4px;
+  box-sizing: border-box;
+  display: block;
+}
+
+
+.login-label {
+  font-weight: bold;
+}
+
+/* Textos principales blancos y en negrita */
+/* Info principal del header: texto blanco, negrita y tamaño pequeño */
+.main-header-info {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.main-header-info .main-stats,
+.main-header-info .main-date {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
   }
 
-  .header-logo-img {
-    height: 64px;
-    max-width: 100%;
-    margin-left: 0;
-    padding-left: 4px;
-    box-sizing: border-box;
-    display: block;
+  to {
+    transform: rotate(360deg);
   }
+}
 
+button {
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0 6px 8px 0;
+  cursor: pointer;
+  box-shadow: 0 1px 4px #ffe06633;
+  transition: background 0.2s, color 0.2s;
+}
 
-  .login-label {
-    font-weight: bold;
-  }
+button:hover {
+  background: #fffbe6;
+  color: #e6b800;
+}
 
-  /* Textos principales blancos y en negrita */
-  /* Info principal del header: texto blanco, negrita y tamaño pequeño */
-  .main-header-info {
-    color: #fff;
-    font-weight: bold;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
+select {
+  background: #fffbe6;
+  color: #1a2a44;
+  border: 1px solid #ffe066;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
 
-  .main-header-info .main-stats,
-  .main-header-info .main-date {
-    color: #fff;
-    font-weight: bold;
-    font-size: 1rem;
-  }
+input,
+textarea {
+  border: 1px solid #ffe066;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  background: #495057;
+  color: #1a2a44 !important;
+}
 
-  .App-link {
-    color: #61dafb;
-  }
+/* Notificación en tiempo real */
+.App .notification {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(90deg, #ffe066 0%, #fffbe6 100%);
+  color: #fffbe6;
+  padding: 12px 20px;
+  border-radius: 8px;
+  z-index: 9999;
+  box-shadow: 0 2px 8px #ffe06688;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
 
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  button {
-    border-radius: 6px;
-    padding: 8px 18px;
-    font-weight: bold;
-    font-size: 1rem;
-    margin: 0 6px 8px 0;
-    cursor: pointer;
-    box-shadow: 0 1px 4px #ffe06633;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  button:hover {
-    background: #fffbe6;
-    color: #e6b800;
-  }
-
-  select {
-    background: #fffbe6;
-    color: #1a2a44;
-    border: 1px solid #ffe066;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 1rem;
-  }
-
-  input,
-  textarea {
-    border: 1px solid #ffe066;
-    border-radius: 4px;
-    padding: 6px 10px;
-    font-size: 1rem;
-    background: #495057;
-    color: #1a2a44 !important;
-  }
-
-  /* Notificación en tiempo real */
-  .App .notification {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: linear-gradient(90deg, #ffe066 0%, #fffbe6 100%);
-    color: #fffbe6;
-    padding: 12px 20px;
-    border-radius: 8px;
-    z-index: 9999;
-    box-shadow: 0 2px 8px #ffe06688;
-    font-weight: bold;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-  }
-
-  .App .notification button {
-    margin-left: 16px;
-    background: transparent;
-    color: #e6b800;
-    border: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
+.App .notification button {
+  margin-left: 16px;
+  background: transparent;
+  color: #e6b800;
+  border: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
