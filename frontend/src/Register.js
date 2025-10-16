@@ -32,7 +32,7 @@ const countries = [
 
 function Register({ onRegister }) {
     const { t } = useLanguage();
-    const [form, setForm] = useState({ username: '', email: '', password: '', country: '' });
+    const [form, setForm] = useState({ username: '', email: '', password: '', country: '', clubName: '', stadiumName: '' });
     const [error, setError] = useState('');
 
     const handleChange = e => {
@@ -50,7 +50,7 @@ function Register({ onRegister }) {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Error al registrar');
-            onRegister(data.user);
+            onRegister(data);
         } catch (err) {
             setError(err.message);
         }
@@ -68,6 +68,8 @@ function Register({ onRegister }) {
                     <option key={c} value={c}>{c}</option>
                 ))}
             </select>
+            <input name="clubName" placeholder="Nombre del club" value={form.clubName} onChange={handleChange} required />
+            <input name="stadiumName" placeholder="Nombre del estadio" value={form.stadiumName} onChange={handleChange} required />
             <button type="submit">{t.registerBtn || t.register || 'Registrarse'}</button>
             {error && <div style={{ color: 'red' }}>{error}</div>}
         </form>
