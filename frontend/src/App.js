@@ -129,14 +129,8 @@ function App() {
           <Route path="/" element={<PublicLanding />} />
           <Route path="/login" element={
             <div className="login-register-layout" style={{ display: 'flex', minHeight: '100vh', flexWrap: 'wrap' }}>
-              {/* Bloque izquierdo: branding o info */}
-              <div style={{ flex: '1 1 320px', background: '#eaeaea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 280, padding: '40px 20px' }}>
-                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 120, marginBottom: 32 }} />
-                <h2 style={{ color: '#1a2a44', fontWeight: 'bold', fontSize: '2rem', marginBottom: 18, textAlign: 'center' }}>Team Soccer Manager</h2>
-                <p style={{ color: '#1a2a44', fontSize: '1.15rem', textAlign: 'center', maxWidth: 260, marginBottom: 0 }}>¡Crea tu club, compite y conviértete en leyenda!</p>
-              </div>
-              {/* Bloque derecho: formulario */}
-              <div style={{ flex: '2 1 400px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', minWidth: 320, padding: '40px 20px' }}>
+              {/* Bloque izquierdo: formulario (1/5) */}
+              <div style={{ flex: '1 1 20%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 220, padding: '40px 20px', boxShadow: '2px 0 8px #0001' }}>
                 <div style={{ width: '100%', maxWidth: 420 }}>
                   {/* Notificación en tiempo real */}
                   {notification && (
@@ -164,22 +158,28 @@ function App() {
                   )}
                 </div>
               </div>
+              {/* Bloque derecho: presentación (4/5) */}
+              <div style={{ flex: '4 1 80%', background: '#eaeaea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 320, padding: '40px 20px' }}>
+                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 180, marginBottom: 32 }} />
+                <h2 style={{ color: '#1a2a44', fontWeight: 'bold', fontSize: '2.5rem', marginBottom: 18, textAlign: 'center' }}>Team Soccer Manager</h2>
+                <p style={{ color: '#1a2a44', fontSize: '1.25rem', textAlign: 'center', maxWidth: 480, marginBottom: 0 }}>¡Crea tu club, compite y conviértete en leyenda! Vive la experiencia de gestión futbolística más completa y desafía a miles de managers en línea.</p>
+              </div>
             </div>
           } />
           <Route path="/register" element={
             <div className="login-register-layout" style={{ display: 'flex', minHeight: '100vh', flexWrap: 'wrap' }}>
-              {/* Bloque izquierdo: branding o info */}
-              <div style={{ flex: '1 1 320px', background: '#eaeaea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 280, padding: '40px 20px' }}>
-                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 120, marginBottom: 32 }} />
-                <h2 style={{ color: '#1a2a44', fontWeight: 'bold', fontSize: '2rem', marginBottom: 18, textAlign: 'center' }}>Team Soccer Manager</h2>
-                <p style={{ color: '#1a2a44', fontSize: '1.15rem', textAlign: 'center', maxWidth: 260, marginBottom: 0 }}>¡Crea tu club, compite y conviértete en leyenda!</p>
-              </div>
-              {/* Bloque derecho: formulario */}
-              <div style={{ flex: '2 1 400px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', minWidth: 320, padding: '40px 20px' }}>
+              {/* Bloque izquierdo: formulario (1/5) */}
+              <div style={{ flex: '1 1 20%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 220, padding: '40px 20px', boxShadow: '2px 0 8px #0001' }}>
                 <div style={{ width: '100%', maxWidth: 420 }}>
                   <Register onRegister={handleRegister} />
                   <p style={{ textAlign: 'center', marginTop: 18 }}>¿Ya tienes cuenta? <a href="/login" style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>Inicia sesión</a></p>
                 </div>
+              </div>
+              {/* Bloque derecho: presentación (4/5) */}
+              <div style={{ flex: '4 1 80%', background: '#eaeaea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 320, padding: '40px 20px' }}>
+                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 180, marginBottom: 32 }} />
+                <h2 style={{ color: '#1a2a44', fontWeight: 'bold', fontSize: '2.5rem', marginBottom: 18, textAlign: 'center' }}>Team Soccer Manager</h2>
+                <p style={{ color: '#1a2a44', fontSize: '1.25rem', textAlign: 'center', maxWidth: 480, marginBottom: 0 }}>¡Crea tu club, compite y conviértete en leyenda! Vive la experiencia de gestión futbolística más completa y desafía a miles de managers en línea.</p>
               </div>
             </div>
           } />
