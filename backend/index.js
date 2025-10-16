@@ -1,4 +1,4 @@
-// Commit de prueba para forzar despliegue Render
+// Commit de prueba para forzar despliegue Render (16/10/2025)
 const mongoose = require('mongoose');
 const auth = require('./middleware/auth');
 const express = require('express');
@@ -33,19 +33,19 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer';
 
 // Solo arrancar el servidor después de conectar a MongoDB
-        // Endpoint temporal para eliminar usuario y equipo por email (solo pruebas)
-        app.delete('/api/dev/delete-user', async (req, res) => {
-            try {
-                const { email } = req.body;
-                const user = await User.findOne({ email });
-                if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-                await Team.deleteMany({ owner: user._id });
-                await User.deleteOne({ _id: user._id });
-                res.json({ message: 'Usuario y equipos eliminados' });
-            } catch (error) {
-                res.status(400).json({ error: error.message });
-            }
-        });
+// Endpoint temporal para eliminar usuario y equipo por email (solo pruebas)
+app.delete('/api/dev/delete-user', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        await Team.deleteMany({ owner: user._id });
+        await User.deleteOne({ _id: user._id });
+        res.json({ message: 'Usuario y equipos eliminados' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB conectado');
