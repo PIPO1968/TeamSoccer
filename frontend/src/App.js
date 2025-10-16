@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicLanding from './PublicLanding';
 import Home from './Home';
-import ClubSetup from './ClubSetup';
 import MultiMatchViewer from './MultiMatchViewer';
 import RoomMadnessViewer from './RoomMadnessViewer';
 import Login from './Login';
@@ -38,8 +37,8 @@ function App() {
   const [timeStr, setTimeStr] = useState('');
   const [language, setLanguage] = useState('es');
   const [translations, setTranslations] = useState({});
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null); // No usamos localStorage
+  const [token, setToken] = useState(null); // No usamos localStorage
   const [showLogin, setShowLogin] = useState(true);
   const [showNational, setShowNational] = useState(false);
   const [showStore, setShowStore] = useState(false);
@@ -52,14 +51,8 @@ function App() {
   const [clubConfigured, setClubConfigured] = useState(false);
   const [clubData, setClubData] = useState(null);
 
-  // Simulación: tras login, si no hay club configurado, mostrar ClubSetup
-  const handleClubSetup = (data) => {
-    setClubConfigured(true);
-    setClubData(data);
-    setNotification('¡Club configurado!');
-    // Redirigir a Home automáticamente
-    window.location.href = '/login';
-  };
+  // Crear el club en el backend y actualizar estado
+  // (No hay uso de localStorage aquí)
 
   // Efectos para cargar datos iniciales
   useEffect(() => {
@@ -75,6 +68,7 @@ function App() {
   }, []);
 
   // Funciones de login/register/logout
+  // Eliminado cualquier uso de localStorage. El estado solo vive en memoria.
   const handleLogin = async (data) => {
     setUser(data.user);
     setToken(data.token);
@@ -127,40 +121,65 @@ function App() {
 
   return (
     <Router>
-      <Header />
-      <TopNavBar />
-      <div style={{ paddingTop: 112 }}>
+      {/* Solo mostrar Header y TopNavBar si el usuario está autenticado */}
+      {user && <Header />}
+      {user && <TopNavBar />}
+      <div style={{ paddingTop: user ? 112 : 0 }}>
         <Routes>
           <Route path="/" element={<PublicLanding />} />
           <Route path="/login" element={
-            <div className="App">
-              {/* Notificación en tiempo real */}
-              {notification && (
-                <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
-                  {notification}
-                  <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
+            <div className="login-register-layout" style={{ display: 'flex', minHeight: '100vh', flexWrap: 'wrap' }}>
+              {/* Bloque izquierdo: branding o info */}
+              <div style={{ flex: '1 1 320px', background: '#eaeaea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 280, padding: '40px 20px' }}>
+                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 120, marginBottom: 32 }} />
+                <h2 style={{ color: '#1a2a44', fontWeight: 'bold', fontSize: '2rem', marginBottom: 18, textAlign: 'center' }}>Team Soccer Manager</h2>
+                <p style={{ color: '#1a2a44', fontSize: '1.15rem', textAlign: 'center', maxWidth: 260, marginBottom: 0 }}>¡Crea tu club, compite y conviértete en leyenda!</p>
+              </div>
+              {/* Bloque derecho: formulario */}
+              <div style={{ flex: '2 1 400px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', minWidth: 320, padding: '40px 20px' }}>
+                <div style={{ width: '100%', maxWidth: 420 }}>
+                  {/* Notificación en tiempo real */}
+                  {notification && (
+                    <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
+                      {notification}
+                      <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
+                    </div>
+                  )}
+                  {!user ? (
+                    <div>
+                      {showLogin ? (
+                        <div>
+                          <Login onLogin={handleLogin} />
+                          <p style={{ textAlign: 'center', marginTop: 18 }}>¿No tienes cuenta? <button style={{ background: '#eaeaea', color: '#1a2a44', border: 'none', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setShowLogin(false)}>Regístrate</button></p>
+                        </div>
+                      ) : (
+                        <div>
+                          <Register onRegister={handleRegister} />
+                          <p style={{ textAlign: 'center', marginTop: 18 }}>¿Ya tienes cuenta? <button style={{ background: '#eaeaea', color: '#1a2a44', border: 'none', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Home user={user} clubData={clubData} onLogout={handleLogout} />
+                  )}
                 </div>
-              )}
-              <div className="main-content">
-                {!user ? (
-                  <div>
-                    {showLogin ? (
-                      <div>
-                        <Login onLogin={handleLogin} />
-                        <p>¿No tienes cuenta? <button onClick={() => setShowLogin(false)}>Regístrate</button></p>
-                      </div>
-                    ) : (
-                      <div>
-                        <Register onRegister={handleRegister} />
-                        <p>¿Ya tienes cuenta? <button onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
-                      </div>
-                    )}
-                  </div>
-                ) : !clubConfigured ? (
-                  <ClubSetup onSetup={handleClubSetup} onLogout={handleLogout} />
-                ) : (
-                  <Home user={user} clubData={clubData} onLogout={handleLogout} />
-                )}
+              </div>
+            </div>
+          } />
+          <Route path="/register" element={
+            <div className="login-register-layout" style={{ display: 'flex', minHeight: '100vh', flexWrap: 'wrap' }}>
+              {/* Bloque izquierdo: branding o info */}
+              <div style={{ flex: '1 1 320px', background: '#eaeaea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 280, padding: '40px 20px' }}>
+                <img src="https://www.teamsoccer.org/teamsoccer-assets/cbc230b4-3215-4a9f-9673-4064a3ad90c4.png" alt="Logo TeamSoccer" style={{ width: 120, marginBottom: 32 }} />
+                <h2 style={{ color: '#1a2a44', fontWeight: 'bold', fontSize: '2rem', marginBottom: 18, textAlign: 'center' }}>Team Soccer Manager</h2>
+                <p style={{ color: '#1a2a44', fontSize: '1.15rem', textAlign: 'center', maxWidth: 260, marginBottom: 0 }}>¡Crea tu club, compite y conviértete en leyenda!</p>
+              </div>
+              {/* Bloque derecho: formulario */}
+              <div style={{ flex: '2 1 400px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', minWidth: 320, padding: '40px 20px' }}>
+                <div style={{ width: '100%', maxWidth: 420 }}>
+                  <Register onRegister={handleRegister} />
+                  <p style={{ textAlign: 'center', marginTop: 18 }}>¿Ya tienes cuenta? <a href="/login" style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>Inicia sesión</a></p>
+                </div>
               </div>
             </div>
           } />
