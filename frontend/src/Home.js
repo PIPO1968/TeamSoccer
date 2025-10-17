@@ -28,29 +28,27 @@ function Home({ user, clubData, onLogout }) {
     };
 
     return (
-        <div className="main-content-with-sidebar">
-            <main className="club-main club-main-wide" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32 }}>
-                    {/* Bloque escudo en la esquina izquierda, debajo del sidebar horizontal y pegado al sidebar vertical */}
-                    <div style={{ minWidth: 100, maxWidth: 120, marginTop: 0, marginLeft: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#fff', borderRadius: 12, boxShadow: '0 1px 8px #0001', padding: '18px 12px' }}>
-                        <input type="file" ref={fileInputRef} accept="image/*" onChange={handleEscudoChange} style={{ marginBottom: 8 }} />
-                        <img src={escudo} alt="Escudo del club" style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover', boxShadow: '0 1px 8px #0002' }} />
+        <div className="main-content-with-sidebar" style={{ display: 'flex', flexDirection: 'row', minHeight: '100vh' }}>
+            {/* Escudo en la esquina izquierda, debajo del sidebar horizontal y pegado al sidebar vertical */}
+            <div style={{ minWidth: 120, maxWidth: 140, marginTop: 0, marginLeft: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#fff', borderRadius: 12, boxShadow: '0 1px 8px #0001', padding: '18px 12px', position: 'fixed', top: 112, left: 220, zIndex: 950 }}>
+                <input type="file" ref={fileInputRef} accept="image/*" onChange={handleEscudoChange} style={{ marginBottom: 8 }} />
+                <img src={escudo} alt="Escudo del club" style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover', boxShadow: '0 1px 8px #0002' }} />
+            </div>
+            {/* Bloque principal centrado */}
+            <main className="club-main club-main-wide" style={{ flex: 1, marginLeft: 180, paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <div style={{ textAlign: 'center' }}>
+                    <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Spain Soccer Club-id100'}</h2>
+                    <div style={{ fontSize: '1.1rem', color: '#495057', marginBottom: 8 }}>Club Details:</div>
+                    <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>
+                        Competes in {clubData?.country || 'Spain'} - division: <a href="/liga" style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>{clubData?.division || 'I.1'}</a>
                     </div>
-                    {/* Bloque principal centrado */}
-                    <div style={{ flex: 1, textAlign: 'center' }}>
-                        <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Spain Soccer Club-id100'}</h2>
-                        <div style={{ fontSize: '1.1rem', color: '#495057', marginBottom: 8 }}>Club Details:</div>
-                        <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>
-                            Competes in {clubData?.country || 'Spain'} - division: <a href="/liga" style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>{clubData?.division || 'I.1'}</a>
-                        </div>
-                        <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>Managed by: <b>{user?.username || 'PIPO68'}</b></div>
-                        <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>Stadium: {clubData?.stadiumName || 'Spain Soccer Club Stadium'} (capacity {clubData?.stadiumCapacity || '15,000'})</div>
-                        <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>National ranking ({clubData?.nationalRanking || 2})</div>
-                        <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>World ranking ({clubData?.worldRanking || 187})</div>
-                        <div style={{ display: 'flex', gap: 12, marginTop: 12, justifyContent: 'center' }}>
-                            <button style={{ background: '#1a2a44', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Challenge to Friendly Match</button>
-                            <button style={{ background: '#eaeaea', color: '#1a2a44', borderRadius: 8, padding: '8px 18px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Send Message</button>
-                        </div>
+                    <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>Managed by: <b>{user?.username || 'PIPO68'}</b></div>
+                    <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>Stadium: {clubData?.stadiumName || 'Spain Soccer Club Stadium'} (capacity {clubData?.stadiumCapacity || '15,000'})</div>
+                    <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>National ranking ({clubData?.nationalRanking || 2})</div>
+                    <div style={{ fontSize: '1rem', color: '#495057', marginBottom: 4 }}>World ranking ({clubData?.worldRanking || 187})</div>
+                    <div style={{ display: 'flex', gap: 12, marginTop: 12, justifyContent: 'center' }}>
+                        <button style={{ background: '#1a2a44', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Challenge to Friendly Match</button>
+                        <button style={{ background: '#eaeaea', color: '#1a2a44', borderRadius: 8, padding: '8px 18px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Send Message</button>
                     </div>
                 </div>
                 <section style={{ background: '#fff', borderRadius: 8, boxShadow: '0 1px 8px #0001', padding: 18 }}>
