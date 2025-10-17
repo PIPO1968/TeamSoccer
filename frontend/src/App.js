@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import PublicLanding from './PublicLanding';
 import Home from './Home';
 import MultiMatchViewer from './MultiMatchViewer';
@@ -31,6 +31,17 @@ const infoBoxStyle = {
 };
 
 function App() {
+  // Redirección automática si usuario autenticado y en /login o /register
+  function AuthRedirector() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    useEffect(() => {
+      if (user && (location.pathname === '/login' || location.pathname === '/register')) {
+        navigate('/');
+      }
+    }, [user, location, navigate]);
+    return null;
+  }
   // Estados principales
   const [notification, setNotification] = useState(null);
   const [activeManagers, setActiveManagers] = useState(0);
@@ -193,6 +204,7 @@ function App() {
 
   return (
     <Router>
+      <AuthRedirector />
       <Header />
       {user && <TopNavBar />}
       <div style={{ paddingTop: 64 + (user ? 48 : 0), display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
