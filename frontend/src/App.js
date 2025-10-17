@@ -78,8 +78,8 @@ function App() {
           if (data && data.user) {
             setUser(data.user);
             setNotification('Sesión restaurada');
-            // Consultar club
-            if (data.user.clubId) {
+            // Consultar club solo si hay clubId válido
+            if (data.user.clubId && data.user.clubId !== 'undefined' && data.user.clubId !== 'null') {
               fetch(`${process.env.REACT_APP_API_URL}/api/teams/${data.user.clubId}`, {
                 headers: { Authorization: `Bearer ${token}` }
               })
@@ -100,6 +100,8 @@ function App() {
                   setLoading(false);
                 });
             } else {
+              setClubConfigured(false);
+              setClubData(null);
               setLoading(false);
             }
           } else {
