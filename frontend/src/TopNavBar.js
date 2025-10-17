@@ -11,6 +11,7 @@ function TopNavBar() {
                 <li><a href="/store" style={navStyle}>Tienda</a></li>
                 <li><a href="/rooms" style={navStyle}>Salas</a></li>
                 <li><a href="/community" style={navStyle}>Comunidad</a></li>
+                <li><a href="/forums" style={navStyle}>Foros</a></li>
                 <li><a href="/national" style={navStyle}>Selección</a></li>
                 <li><a href="/viewer" style={navStyle}>MultiViewer</a></li>
             </ul>
