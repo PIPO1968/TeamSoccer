@@ -192,11 +192,11 @@ function App() {
 
   return (
     <Router>
-      {/* Solo mostrar Header, TopNavBar y Sidebar si el usuario está autenticado */}
-      {user && <Header />}
-      {user && <TopNavBar />}
-      <div style={{ paddingTop: user ? 112 : 0, display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
-        {user && <Sidebar clubData={clubData} />}
+      {/* Mostrar Header, TopNavBar y Sidebar siempre para mantener layout fijo */}
+      <Header />
+      <TopNavBar />
+      <div style={{ paddingTop: 112, display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
+        <Sidebar clubData={clubData} />
         <div style={{ flex: 1, minWidth: 0 }}>
           {loading ? (
             <div style={{ textAlign: 'center', marginTop: 80, fontSize: 22, color: '#1a2a44' }}>Validando sesión...</div>
