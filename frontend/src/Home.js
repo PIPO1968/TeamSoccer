@@ -1,3 +1,4 @@
+// Cambio menor para forzar build en Vercel
 
 import React, { useRef, useState } from 'react';
 
