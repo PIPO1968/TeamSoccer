@@ -30,8 +30,7 @@ function Home({ user, clubData, onLogout }) {
     const entrenamientosLink = '/entrenamientos';
 
     return (
-        <div className="club-layout club-layout-no-sidebar main-content-with-sidebar">
-            {/* Bloques central y derecho */}
+        <div className="main-content-with-sidebar">
             <main className="club-main club-main-wide">
                 <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Nombre del club'}</h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
@@ -56,35 +55,6 @@ function Home({ user, clubData, onLogout }) {
                     </ul>
                 </section>
             </main>
-            {/* Bloque derecho */}
-            <aside className="club-sidebar club-sidebar-right club-sidebar-narrow">
-                <button style={{ background: '#1a2a44', color: '#fff', fontWeight: 'bold', borderRadius: 8, padding: '12px 0', marginBottom: 18 }}>Retar a amistoso</button>
-                <div>
-                    <b>Retadores:</b>
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                        {retadores.map((r, i) => (
-                            <li key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                                <a href={r.link} style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>{r.name}</a>
-                                <span>
-                                    <button style={{ background: '#4caf50', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', marginRight: 4 }}>Aceptar</button>
-                                    <button style={{ background: '#c00', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px' }}>Denegar</button>
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    <b>Últimas visitas:</b>
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                        {ultimasVisitas.map((v, i) => (
-                            <li key={i} style={{ marginBottom: 6 }}>
-                                <a href={v.link} style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>{v.name}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <button onClick={onLogout} style={{ background: '#c00', color: '#fff', padding: '8px 16px', borderRadius: 6, border: 'none', fontWeight: 'bold', cursor: 'pointer', marginTop: 24 }}>Cerrar sesión</button>
-            </aside>
         </div>
     );
 }
