@@ -39,7 +39,8 @@ function App() {
   const [language, setLanguage] = useState('es');
   const [translations, setTranslations] = useState({});
   const [user, setUser] = useState(null); // No usamos localStorage
-  const [token, setToken] = useState(null); // No usamos localStorage
+  // Usar sessionStorage para persistir el token durante la sesión del navegador
+  const [token, setToken] = useState(() => sessionStorage.getItem('token') || null);
   const [showLogin, setShowLogin] = useState(true);
   const [showNational, setShowNational] = useState(false);
   const [showStore, setShowStore] = useState(false);
@@ -112,6 +113,7 @@ function App() {
   const handleLogin = async (data) => {
     setUser(data.user);
     setToken(data.token);
+    sessionStorage.setItem('token', data.token);
     setShowLogin(false);
     setNotification('¡Bienvenido!');
     // Consultar al backend si el club ya está configurado
@@ -145,12 +147,14 @@ function App() {
   const handleRegister = (data) => {
     setUser(data.user);
     setToken(data.token);
+    sessionStorage.setItem('token', data.token);
     setShowLogin(false);
     setNotification('¡Registro exitoso!');
   };
   const handleLogout = () => {
     setUser(null);
     setToken(null);
+    sessionStorage.removeItem('token');
     setShowLogin(true);
     setNotification('Sesión cerrada');
   };
