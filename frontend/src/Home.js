@@ -30,11 +30,13 @@ function Home({ user, clubData, onLogout }) {
     return (
         <div className="main-content-with-sidebar">
             <main className="club-main club-main-wide" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32 }}>
+                    {/* Bloque escudo en la esquina izquierda, debajo del sidebar horizontal y pegado al sidebar vertical */}
+                    <div style={{ minWidth: 100, maxWidth: 120, marginTop: 0, marginLeft: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#fff', borderRadius: 12, boxShadow: '0 1px 8px #0001', padding: '18px 12px' }}>
                         <input type="file" ref={fileInputRef} accept="image/*" onChange={handleEscudoChange} style={{ marginBottom: 8 }} />
                         <img src={escudo} alt="Escudo del club" style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover', boxShadow: '0 1px 8px #0002' }} />
                     </div>
+                    {/* Bloque principal centrado */}
                     <div style={{ flex: 1, textAlign: 'center' }}>
                         <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Spain Soccer Club-id100'}</h2>
                         <div style={{ fontSize: '1.1rem', color: '#495057', marginBottom: 8 }}>Club Details:</div>
