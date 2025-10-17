@@ -192,11 +192,10 @@ function App() {
 
   return (
     <Router>
-      {/* Mostrar Header, TopNavBar y Sidebar siempre para mantener layout fijo */}
       <Header />
-      <TopNavBar />
-      <div style={{ paddingTop: 112, display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
-        <Sidebar clubData={clubData} />
+      {user && <TopNavBar />}
+      <div style={{ paddingTop: 64 + (user ? 48 : 0), display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
+        {user && <Sidebar clubData={clubData} />}
         <div style={{ flex: 1, minWidth: 0 }}>
           {loading ? (
             <div style={{ textAlign: 'center', marginTop: 80, fontSize: 22, color: '#1a2a44' }}>Validando sesión...</div>
@@ -220,10 +219,7 @@ function App() {
                           <p style={{ textAlign: 'center', marginTop: 18 }}>¿No tienes cuenta? <button style={{ background: '#eaeaea', color: '#1a2a44', border: 'none', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setShowLogin(false)}>Regístrate</button></p>
                         </div>
                       ) : (
-                        <div>
-                          <Register onRegister={handleRegister} />
-                          <p style={{ textAlign: 'center', marginTop: 18 }}>¿Ya tienes cuenta? <button style={{ background: '#eaeaea', color: '#1a2a44', border: 'none', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setShowLogin(true)}>Inicia sesión</button></p>
-                        </div>
+                        <Register onRegister={handleRegister} />
                       )}
                     </div>
                   ) : (
