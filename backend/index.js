@@ -1600,7 +1600,11 @@ app.post('/api/users', async (req, res) => {
             await botTeam.save();
         }
 
-        res.status(201).json({ message: 'Usuario registrado', user: { username, email, _id: user._id }, team: botTeam });
+        // Generar token JWT igual que en el login
+        const clubId = botTeam ? botTeam._id : null;
+        const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+
+        res.status(201).json({ message: 'Usuario registrado', user: { username, email, _id: user._id, clubId }, team: botTeam, token });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
