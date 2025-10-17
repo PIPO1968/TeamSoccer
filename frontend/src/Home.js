@@ -30,13 +30,13 @@ function Home({ user, clubData, onLogout }) {
     return (
         <div className="main-content-with-sidebar" style={{ display: 'flex', flexDirection: 'row', minHeight: '100vh' }}>
             {/* Contenido principal de la página, ocupa el 80% restante */}
-            <div style={{ flex: '4 1 80%', marginLeft: '20%', paddingTop: 24, display: 'flex', flexDirection: 'row', gap: 32 }}>
-                {/* Escudo en la esquina izquierda del área de contenido */}
-                <div style={{ minWidth: 120, maxWidth: 140, display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#fff', borderRadius: 12, boxShadow: '0 1px 8px #0001', padding: '18px 12px', height: 'fit-content' }}>
-                    <input type="file" ref={fileInputRef} accept="image/*" onChange={handleEscudoChange} style={{ marginBottom: 8 }} />
-                    <img src={escudo} alt="Escudo del club" style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover', boxShadow: '0 1px 8px #0002' }} />
+            <div style={{ flex: '4 1 80%', marginLeft: '20%', paddingTop: 24, display: 'flex', flexDirection: 'row', gap: 32, alignItems: 'flex-start' }}>
+                {/* Escudo alineado arriba a la izquierda y espacio más grande */}
+                <div style={{ minWidth: 180, maxWidth: 220, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', background: '#fff', borderRadius: 16, boxShadow: '0 1px 12px #0001', padding: '24px 18px', height: 'fit-content', marginRight: 32 }}>
+                    <input type="file" ref={fileInputRef} accept="image/*" onChange={handleEscudoChange} style={{ marginBottom: 12, width: '100%' }} />
+                    <img src={escudo} alt="Escudo del club" style={{ width: 140, height: 140, borderRadius: 12, objectFit: 'cover', boxShadow: '0 2px 12px #0002', display: 'block' }} />
                 </div>
-                {/* Bloque principal centrado */}
+                {/* Bloque principal a la derecha del escudo */}
                 <main className="club-main club-main-wide" style={{ flex: 1, paddingTop: 0, display: 'flex', flexDirection: 'column', gap: 24 }}>
                     <div style={{ textAlign: 'center' }}>
                         <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Spain Soccer Club-id100'}</h2>
