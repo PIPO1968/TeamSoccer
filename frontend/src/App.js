@@ -30,18 +30,19 @@ const infoBoxStyle = {
   lineHeight: 1.6
 };
 
+// Redirección automática si usuario autenticado y en /login o /register
+function AuthRedirector({ user }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user && (location.pathname === '/login' || location.pathname === '/register')) {
+      navigate('/');
+    }
+  }, [user, location, navigate]);
+  return null;
+}
+
 function App() {
-  // Redirección automática si usuario autenticado y en /login o /register
-  function AuthRedirector() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    useEffect(() => {
-      if (user && (location.pathname === '/login' || location.pathname === '/register')) {
-        navigate('/');
-      }
-    }, [user, location, navigate]);
-    return null;
-  }
   // Estados principales
   const [notification, setNotification] = useState(null);
   const [activeManagers, setActiveManagers] = useState(0);
@@ -204,7 +205,7 @@ function App() {
 
   return (
     <Router>
-      <AuthRedirector />
+      <AuthRedirector user={user} />
       <Header />
       {user && <TopNavBar />}
       <div style={{ paddingTop: 64 + (user ? 48 : 0), display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
