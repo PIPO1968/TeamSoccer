@@ -1,3 +1,106 @@
+/* Sidebar lateral global fijo */
+.global-sidebar {
+  position: fixed;
+  top: 112px;
+  /* header (64px) + topnav (48px) */
+  left: 0;
+  width: 220px;
+  height: calc(100vh - 112px);
+  background: #fff;
+  box-shadow: 2px 0 8px #0001;
+  padding: 32px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  z-index: 900;
+  border-radius: 0 12px 12px 0;
+}
+
+/* El contenido principal de cada página debe dejar espacio para el sidebar */
+.main-content-with-sidebar {
+  margin-left: 240px;
+  /* ancho sidebar + separación */
+  min-width: 0;
+}
+
+/* Layout de la página de club (solo central y derecho, con separación) */
+.club-layout-no-sidebar {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  background: #f7faff;
+  min-height: 100vh;
+}
+
+.club-main-wide {
+  flex: 3 1 75%;
+  background: #eaeaea;
+  padding: 40px 32px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: 0 1px 8px #0001;
+}
+
+.club-sidebar-narrow {
+  flex: 1 1 25%;
+  background: #fff;
+  padding: 32px 18px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 220px;
+  max-width: 320px;
+  box-shadow: 0 1px 8px #0001;
+}
+
+/* Layout de la página de club SIN sidebar lateral */
+.club-layout-no-sidebar {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  background: #f7faff;
+  min-height: 100vh;
+}
+
+.club-main-wide {
+  flex: 3 1 75%;
+  background: #eaeaea;
+  padding: 40px 32px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: 0 1px 8px #0001;
+}
+
+.club-sidebar-narrow {
+  flex: 1 1 25%;
+  background: #fff;
+  padding: 32px 18px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 220px;
+  max-width: 320px;
+  box-shadow: 0 1px 8px #0001;
+}
+
 /* Layout de la página del club (Home.js) - SOLO UNA DEFINICIÓN POR CLASE */
 .club-layout {
   display: flex;

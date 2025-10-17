@@ -30,22 +30,9 @@ function Home({ user, clubData, onLogout }) {
     const entrenamientosLink = '/entrenamientos';
 
     return (
-        <div className="club-layout">
-            {/* Sidebar izquierdo */}
-            <aside className="club-sidebar club-sidebar-left">
-                <div style={{ textAlign: 'center', marginBottom: 18 }}>
-                    <img src={clubData?.escudoUrl || 'https://www.teamsoccer.org/teamsoccer-assets/default-escudo.png'} alt="Escudo del club" style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover', marginBottom: 8 }} />
-                    <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#1a2a44' }}>{clubData?.teamName || 'Nombre del club'}</div>
-                </div>
-                <div><b>País:</b> <a href={paisLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>{clubData?.country || 'España'} <img src="https://flagcdn.com/es.svg" alt="Bandera" style={{ width: 24, verticalAlign: 'middle', marginLeft: 4 }} /></a></div>
-                <div><b>Jugadores:</b> <a href={jugadoresLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>Ver plantilla</a></div>
-                <div><b>División:</b> <a href={divisionLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>{division}</a></div>
-                <div><b>Estadio:</b> <a href={estadioLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>{clubData?.stadiumName || 'Estadio Nacional'}</a></div>
-                <div><b>Partidos:</b> <a href={partidosLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>Ver partidos</a></div>
-                <div><b>Entrenamientos:</b> <a href={entrenamientosLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>Ver entrenamientos</a></div>
-            </aside>
-            {/* Bloque central */}
-            <main className="club-main">
+        <div className="club-layout club-layout-no-sidebar main-content-with-sidebar">
+            {/* Bloques central y derecho */}
+            <main className="club-main club-main-wide">
                 <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Nombre del club'}</h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                     <input type="file" style={{ marginRight: 12 }} />
@@ -70,7 +57,7 @@ function Home({ user, clubData, onLogout }) {
                 </section>
             </main>
             {/* Bloque derecho */}
-            <aside className="club-sidebar club-sidebar-right">
+            <aside className="club-sidebar club-sidebar-right club-sidebar-narrow">
                 <button style={{ background: '#1a2a44', color: '#fff', fontWeight: 'bold', borderRadius: 8, padding: '12px 0', marginBottom: 18 }}>Retar a amistoso</button>
                 <div>
                     <b>Retadores:</b>
