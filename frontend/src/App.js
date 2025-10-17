@@ -82,7 +82,8 @@ function App() {
           console.log('[DEBUG] /api/auth/me data:', data);
           if (data && data.user) {
             setUser(data.user);
-            setNotification('Sesión restaurada');
+            // Solo mostrar notificación si ya había un usuario antes (no en la primera carga)
+            // No mostrar la notificación 'Sesión restaurada' nunca al usuario final
             // Consultar club solo si hay clubId válido
             if (data.user.clubId && data.user.clubId !== 'undefined' && data.user.clubId !== 'null') {
               fetch(`${process.env.REACT_APP_API_URL}/api/teams/${data.user.clubId}`, {
@@ -203,35 +204,37 @@ function App() {
             <Routes>
               <Route path="/" element={<PublicLanding />} />
               <Route path="/login" element={
-                <div style={{ width: '100%', maxWidth: 420, margin: '0 auto', paddingTop: 48 }}>
-                  {/* Notificación en tiempo real */}
-                  {notification && (
-                    <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
-                      {notification}
-                      <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
-                    </div>
-                  )}
-                  {!user ? (
-                    <div>
-                      {showLogin ? (
-                        <div>
-                          <Login onLogin={handleLogin} />
-                          <p style={{ textAlign: 'center', marginTop: 18 }}>¿No tienes cuenta? <button style={{ background: '#eaeaea', color: '#1a2a44', border: 'none', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setShowLogin(false)}>Regístrate</button></p>
-                        </div>
-                      ) : (
-                        <Register onRegister={handleRegister} />
-                      )}
-                    </div>
-                  ) : (
-                    <Home user={user} clubData={clubData} onLogout={handleLogout} />
-                  )}
-                </div>
+                user ? (
+                  <Home user={user} clubData={clubData} onLogout={handleLogout} />
+                ) : (
+                  <div style={{ width: '100%', maxWidth: 420, margin: '0 auto', paddingTop: 48 }}>
+                    {/* Notificación en tiempo real */}
+                    {notification && (
+                      <div style={{ position: 'fixed', top: 10, right: 10, background: '#1a2a44', color: '#fff', padding: '12px 20px', borderRadius: 8, zIndex: 9999, boxShadow: '0 2px 8px #0004' }}>
+                        {notification}
+                        <button style={{ marginLeft: 16, background: 'transparent', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNotification(null)}>X</button>
+                      </div>
+                    )}
+                    {showLogin ? (
+                      <div>
+                        <Login onLogin={handleLogin} />
+                        <p style={{ textAlign: 'center', marginTop: 18 }}>¿No tienes cuenta? <button style={{ background: '#eaeaea', color: '#1a2a44', border: 'none', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setShowLogin(false)}>Regístrate</button></p>
+                      </div>
+                    ) : (
+                      <Register onRegister={handleRegister} />
+                    )}
+                  </div>
+                )
               } />
               <Route path="/register" element={
-                <div style={{ width: '100%', maxWidth: 420, margin: '0 auto', paddingTop: 48 }}>
-                  <Register onRegister={handleRegister} />
-                  <p style={{ textAlign: 'center', marginTop: 18 }}>¿Ya tienes cuenta? <a href="/login" style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>Inicia sesión</a></p>
-                </div>
+                user ? (
+                  <Home user={user} clubData={clubData} onLogout={handleLogout} />
+                ) : (
+                  <div style={{ width: '100%', maxWidth: 420, margin: '0 auto', paddingTop: 48 }}>
+                    <Register onRegister={handleRegister} />
+                    <p style={{ textAlign: 'center', marginTop: 18 }}>¿Ya tienes cuenta? <a href="/login" style={{ color: '#1a2a44', textDecoration: 'underline', fontWeight: 'bold' }}>Inicia sesión</a></p>
+                  </div>
+                )
               } />
             </Routes>
           )}
