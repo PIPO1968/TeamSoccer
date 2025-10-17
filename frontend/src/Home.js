@@ -30,9 +30,9 @@ function Home({ user, clubData, onLogout }) {
     const entrenamientosLink = '/entrenamientos';
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f7faff' }}>
-            {/* Sidebar izquierdo fijo */}
-            <aside style={{ flex: '1 1 20%', maxWidth: 320, background: '#fff', boxShadow: '2px 0 8px #0001', padding: 32, display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div className="club-layout">
+            {/* Sidebar izquierdo */}
+            <aside className="club-sidebar club-sidebar-left">
                 <div style={{ textAlign: 'center', marginBottom: 18 }}>
                     <img src={clubData?.escudoUrl || 'https://www.teamsoccer.org/teamsoccer-assets/default-escudo.png'} alt="Escudo del club" style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover', marginBottom: 8 }} />
                     <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#1a2a44' }}>{clubData?.teamName || 'Nombre del club'}</div>
@@ -45,7 +45,7 @@ function Home({ user, clubData, onLogout }) {
                 <div><b>Entrenamientos:</b> <a href={entrenamientosLink} style={{ color: '#1a2a44', textDecoration: 'underline' }}>Ver entrenamientos</a></div>
             </aside>
             {/* Bloque central */}
-            <main style={{ flex: '3 1 60%', padding: '32px 24px', background: '#eaeaea', display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <main className="club-main">
                 <h2 style={{ fontWeight: 'bold', fontSize: '2rem', color: '#1a2a44', marginBottom: 8 }}>{clubData?.teamName || 'Nombre del club'}</h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                     <input type="file" style={{ marginRight: 12 }} />
@@ -70,7 +70,7 @@ function Home({ user, clubData, onLogout }) {
                 </section>
             </main>
             {/* Bloque derecho */}
-            <aside style={{ flex: '1 1 20%', maxWidth: 320, background: '#fff', boxShadow: '-2px 0 8px #0001', padding: 32, display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <aside className="club-sidebar club-sidebar-right">
                 <button style={{ background: '#1a2a44', color: '#fff', fontWeight: 'bold', borderRadius: 8, padding: '12px 0', marginBottom: 18 }}>Retar a amistoso</button>
                 <div>
                     <b>Retadores:</b>
