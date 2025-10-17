@@ -78,7 +78,15 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
                 });
                 await team.save();
 
-                res.status(201).json({ message: 'Usuario y club registrados', user: { username, email, _id: user._id, clubId: team._id }, team });
+                // Generar token igual que en login
+                const jwt = require('jsonwebtoken');
+                const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+                res.status(201).json({
+                    message: 'Usuario y club registrados',
+                    user: { username, email, _id: user._id, clubId: team._id },
+                    team,
+                    token
+                });
             } catch (error) {
                 res.status(400).json({ error: error.message });
             }
@@ -101,6 +109,20 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
                 const clubId = team ? team._id : null;
                 const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
                 res.json({ token, user: { username: user.username, email: user.email, _id: user._id, clubId } });
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+
+        // Endpoint para validar token y devolver usuario
+        app.get('/api/auth/me', auth, async (req, res) => {
+            try {
+                const user = await User.findById(req.user.userId);
+                if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+                // Buscar el equipo del usuario
+                const team = await Team.findOne({ owner: user._id });
+                const clubId = team ? team._id : null;
+                res.json({ user: { username: user.username, email: user.email, _id: user._id, clubId } });
             } catch (error) {
                 res.status(500).json({ error: error.message });
             }
