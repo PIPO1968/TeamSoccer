@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Instalar react-router-dom para producción",
+			"type": "shell",
+			"command": "npm install react-router-dom --save",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint"
+			],
+			"group": "build"
+		}
+	]
+}
