@@ -27,8 +27,8 @@ function App() {
   const [notification, setNotification] = useState(null);
   // const [activeManagers, setActiveManagers] = useState(0);
   // const [onlineManagers, setOnlineManagers] = useState(0);
-  const [dateStr, setDateStr] = useState('');
-  const [timeStr, setTimeStr] = useState('');
+  // const [dateStr, setDateStr] = useState('');
+  // const [timeStr, setTimeStr] = useState('');
   const [language, setLanguage] = useState('es');
   const [translations, setTranslations] = useState({});
   const [user, setUser] = useState(null); // No usamos localStorage
