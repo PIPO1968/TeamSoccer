@@ -3,8 +3,6 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import PublicLanding from './PublicLanding';
 import Home from './Home';
-import MultiMatchViewer from './MultiMatchViewer';
-import RoomMadnessViewer from './RoomMadnessViewer';
 import Login from './Login';
 import Register from './Register';
 import Teams from './Teams';
@@ -206,7 +204,7 @@ function App() {
   return (
     <Router>
       <AuthRedirector user={user} />
-      <Header />
+      {user && <Header />}
       {user && <TopNavBar />}
       <div style={{ paddingTop: 64 + (user ? 48 : 0), display: 'flex', flexDirection: 'row', minHeight: '100vh', background: '#495057' }}>
         {user && <Sidebar clubData={clubData} />}
