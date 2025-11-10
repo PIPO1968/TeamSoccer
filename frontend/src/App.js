@@ -5,26 +5,10 @@ import PublicLanding from './PublicLanding';
 import Home from './Home';
 import Login from './Login';
 import Register from './Register';
-import Matches from './Matches';
-import Store from './Store';
-import Rooms from './Rooms';
-import Community from './Community';
-import NationalDashboard from './NationalDashboard';
 import Header from './Header';
 import TopNavBar from './TopNavBar';
 import Sidebar from './Sidebar';
 
-const infoBoxStyle = {
-  background: '#f7faff',
-  borderRadius: '10px',
-  boxShadow: '0 1px 8px #0001',
-  padding: '18px 18px 10px 18px',
-  margin: '0 auto 24px auto',
-  maxWidth: '600px',
-  fontSize: '1.08rem',
-  color: '#1a2a44',
-  lineHeight: 1.6
-};
 
 // Redirección automática si usuario autenticado y en /login o /register
 function AuthRedirector({ user }) {
@@ -41,8 +25,8 @@ function AuthRedirector({ user }) {
 function App() {
   // Estados principales
   const [notification, setNotification] = useState(null);
-  const [activeManagers, setActiveManagers] = useState(0);
-  const [onlineManagers, setOnlineManagers] = useState(0);
+  // const [activeManagers, setActiveManagers] = useState(0);
+  // const [onlineManagers, setOnlineManagers] = useState(0);
   const [dateStr, setDateStr] = useState('');
   const [timeStr, setTimeStr] = useState('');
   const [language, setLanguage] = useState('es');
