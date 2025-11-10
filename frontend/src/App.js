@@ -5,8 +5,6 @@ import PublicLanding from './PublicLanding';
 import Home from './Home';
 import Login from './Login';
 import Register from './Register';
-import Teams from './Teams';
-import Friendlies from './Friendlies';
 import Matches from './Matches';
 import Store from './Store';
 import Rooms from './Rooms';
