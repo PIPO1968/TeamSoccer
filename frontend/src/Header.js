@@ -47,41 +47,62 @@ function Header() {
 
     // Simulación de estadísticas (puedes conectar a backend si lo deseas)
     useEffect(() => {
-        setActiveManagers(123);
-        setOnlineManagers(45);
+        const fetchStats = () => {
+            fetch(process.env.REACT_APP_API_URL + '/api/user-stats/active')
+                .then(res => res.json())
+                .then(data => setActiveManagers(data.activeManagers))
+                .catch(() => setActiveManagers(0));
+            fetch(process.env.REACT_APP_API_URL + '/api/user-stats/online')
+                .then(res => res.json())
+                .then(data => setOnlineManagers(data.onlineManagers))
+                .catch(() => setOnlineManagers(0));
+        };
+        fetchStats();
+        const interval = setInterval(fetchStats, 10000); // refresca cada 10 segundos
+        return () => clearInterval(interval);
     }, []);
 
     return (
-        <header className="App-header" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
-            <div className="header-logo-container">
-                <img src="/logoTS.png" alt="Logo TeamSoccer" className="header-logo-img" style={{ height: 48, marginRight: 12 }} />
-            </div>
-            <div className="main-header-info" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 32, justifyContent: 'center' }}>
-                <span className="main-stats">{t && t['users'] ? t['users'] : 'Usuarios'}: {activeManagers}</span>
-                <span className="main-stats">{t && t['online'] ? t['online'] : 'Online'}: {onlineManagers}</span>
-                <span className="main-date">{dateStr} {timeStr}</span>
-            </div>
-            <div style={{ minWidth: 120, maxWidth: 180, marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, flex: '0 0 auto', justifyContent: 'flex-end' }}>
-                <span style={{ fontWeight: 'bold', fontSize: '1rem', color: '#fff' }}>{t && t['chooseLanguage'] ? t['chooseLanguage'] : 'Idioma:'}</span>
-                <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4, maxWidth: 120 }}>
-                    <option value="es">Español</option>
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                    <option value="it">Italiano</option>
-                    <option value="pt">Português</option>
-                    <option value="ru">Русский</option>
-                    <option value="zh">中文</option>
-                    <option value="ja">日本語</option>
-                    <option value="ar">العربية</option>
-                    <option value="tr">Türkçe</option>
-                    <option value="hi">हिन्दी</option>
-                    <option value="ko">한국어</option>
-                    <option value="nl">Nederlands</option>
-                    <option value="pl">Polski</option>
-                    <option value="id">Bahasa Indonesia</option>
-                </select>
-            </div>
+        <header
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                zIndex: 1000,
+                background: '#1a237e', // color de fondo header
+                color: '#fff', // color de texto
+                display: 'flex',
+                alignItems: 'center',
+                padding: '8px 24px',
+                fontSize: '1.1rem',
+                fontWeight: 500,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}
+        >
+            <img src="/logoTS.png" alt="Logo TeamSoccer" style={{ height: 36, marginRight: 18 }} />
+            <span style={{ marginRight: 32 }}>Agers activos: {activeManagers}</span>
+            <span style={{ marginRight: 32 }}>Managers online: {onlineManagers}</span>
+            <span style={{ marginRight: 32 }}>{dateStr}&nbsp;&nbsp;{timeStr}</span>
+            <span style={{ marginRight: 12 }}>Elige idioma:</span>
+            <select value={language} onChange={e => setLanguage(e.target.value)} style={{ padding: '4px 8px', borderRadius: 4, maxWidth: 120, fontWeight: 500 }}>
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="it">Italiano</option>
+                <option value="pt">Português</option>
+                <option value="ru">Русский</option>
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
+                <option value="ar">العربية</option>
+                <option value="tr">Türkçe</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ko">한국어</option>
+                <option value="nl">Nederlands</option>
+                <option value="pl">Polski</option>
+                <option value="id">Bahasa Indonesia</option>
+            </select>
         </header>
     );
 }

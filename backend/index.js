@@ -34,18 +34,27 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/teamsoccer
 
 // Solo arrancar el servidor después de conectar a MongoDB
 // Endpoint temporal para eliminar usuario y equipo por email (solo pruebas)
-app.delete('/api/dev/delete-user', async (req, res) => {
-    try {
-        const { email } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-        await Team.deleteMany({ owner: user._id });
-        await User.deleteOne({ _id: user._id });
-        res.json({ message: 'Usuario y equipos eliminados' });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
+// Este endpoint está deshabilitado por defecto en producción. Para habilitarlo,
+// exporta la variable de entorno ALLOW_DEV_ROUTES=true
+if (process.env.ALLOW_DEV_ROUTES === 'true') {
+    app.delete('/api/dev/delete-user', async (req, res) => {
+        try {
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+            await Team.deleteMany({ owner: user._id });
+            await User.deleteOne({ _id: user._id });
+            res.json({ message: 'Usuario y equipos eliminados' });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    });
+} else {
+    // Route exists but returns 404 to avoid leaking implementation details
+    app.delete('/api/dev/delete-user', (req, res) => {
+        res.status(404).json({ error: 'Not Found' });
+    });
+}
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB conectado');
@@ -117,13 +126,19 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
         // Endpoint para validar token y devolver usuario
         app.get('/api/auth/me', auth, async (req, res) => {
             try {
+                console.log('[DEBUG] /api/auth/me token userId:', req.user.userId);
                 const user = await User.findById(req.user.userId);
-                if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+                if (!user) {
+                    console.log('[DEBUG] /api/auth/me: Usuario no encontrado para userId', req.user.userId);
+                    return res.status(404).json({ error: 'Usuario no encontrado' });
+                }
                 // Buscar el equipo del usuario
                 const team = await Team.findOne({ owner: user._id });
                 const clubId = team ? team._id : null;
+                console.log('[DEBUG] /api/auth/me: Usuario encontrado', user.username, 'clubId:', clubId);
                 res.json({ user: { username: user.username, email: user.email, _id: user._id, clubId } });
             } catch (error) {
+                console.log('[DEBUG] /api/auth/me error:', error);
                 res.status(500).json({ error: error.message });
             }
         });
